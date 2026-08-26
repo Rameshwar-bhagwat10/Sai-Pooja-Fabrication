@@ -43,7 +43,7 @@ export function Hero() {
           priority
           quality={90}
           sizes="100vw"
-          className="object-cover object-[72%_center] sm:object-[68%_center] md:object-[60%_center] lg:object-center transition-all duration-700"
+          className="object-cover object-[90%_center] xs:object-[86%_center] sm:object-[78%_center] md:object-[65%_center] lg:object-center transition-all duration-700"
         />
 
         {/* Multi-layered Cinematic Gradient Overlays for High Legibility & Golden Glow */}
@@ -51,7 +51,7 @@ export function Hero() {
         <div className="absolute inset-0 bg-gradient-to-r from-[#090C0A]/95 via-[#10271D]/80 to-transparent hidden sm:block z-10" />
         
         {/* Mobile Top-to-Bottom Scrim */}
-        <div className="absolute inset-0 bg-gradient-to-t from-[#090C0A]/95 via-[#10271D]/75 to-[#10271D]/50 sm:hidden z-10" />
+        <div className="absolute inset-0 bg-gradient-to-t from-[#090C0A]/95 via-[#10271D]/65 to-[#10271D]/30 sm:hidden z-10" />
         
         {/* Bottom Fade to Next Section */}
         <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-[#090C0A] via-[#10271D]/70 to-transparent z-10" />
