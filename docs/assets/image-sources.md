@@ -40,7 +40,7 @@ All product assets represent agricultural implement categories and are marked wi
 
 | Category | Path | Role | Description |
 |---|---|---|---|
-| **Hero Machinery** | `/images/hero/hero-machinery.svg` | Representative | Tractor pulling tillage implement in agricultural field |
+| **Hero Machinery** | `/images/hero/hero-machinery.jpg` | Client Provided / Representative | Heavy tractor pulling tillage implement in agricultural field at golden sunset |
 | **Structural Steel Fabrication** | `/images/workshop/steel-fabrication.svg` | Representative | In-house multi-pass MIG welding & heavy channel assembly |
 | **Field Inversion & Tilth** | `/images/workshop/field-operations.svg` | Representative | Active tractor fieldwork and soil tilth trial |
 

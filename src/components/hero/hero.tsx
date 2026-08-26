@@ -26,101 +26,113 @@ export function Hero() {
   return (
     <section
       ref={containerRef}
-      className="relative min-h-screen w-full flex flex-col justify-between overflow-hidden bg-[#10271D] text-[#F4F1E8] pt-28 pb-8 md:pt-36 md:pb-12"
+      className="relative min-h-[92vh] sm:min-h-screen w-full flex flex-col justify-between overflow-hidden bg-[#10271D] text-[#F4F1E8] pt-28 pb-8 md:pt-36 md:pb-12"
     >
       {/* Background Machinery Media with Layered Industrial Gradients */}
       <motion.div
         style={{ y: imageY, scale: imageScale }}
-        initial={{ opacity: 0.6, scale: prefersReduced ? 1 : 1.08 }}
+        initial={{ opacity: 0.7, scale: prefersReduced ? 1 : 1.06 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 1.2, ease: [0.21, 0.47, 0.32, 0.98] }}
         className="absolute inset-0 z-0 select-none pointer-events-none"
       >
         <Image
-          src="/images/hero/hero-machinery.svg"
-          alt="Sai Pooja Fabrication Heavy Agricultural Machinery"
+          src="/images/hero/hero-machinery.jpg"
+          alt="Sai Pooja Fabrication Heavy Tractor and Agricultural Tillage Machinery at Golden Sunset"
           fill
           priority
+          quality={90}
           sizes="100vw"
-          className="object-cover object-center md:object-right-top"
+          className="object-cover object-[72%_center] sm:object-[68%_center] md:object-[60%_center] lg:object-center transition-all duration-700"
         />
 
-        {/* Multi-layered High-Contrast Gradient Overlays */}
-        <div className="absolute inset-0 bg-gradient-to-r from-[#090C0A]/95 via-[#10271D]/75 to-transparent z-10" />
-        <div className="absolute inset-0 bg-gradient-to-t from-[#090C0A] via-transparent to-[#10271D]/50 z-10" />
-        <div className="absolute inset-0 bg-industrial-grid-dark opacity-30 z-10" />
+        {/* Multi-layered Cinematic Gradient Overlays for High Legibility & Golden Glow */}
+        {/* Desktop Left-to-Right Scrim */}
+        <div className="absolute inset-0 bg-gradient-to-r from-[#090C0A]/95 via-[#10271D]/80 to-transparent hidden sm:block z-10" />
+        
+        {/* Mobile Top-to-Bottom Scrim */}
+        <div className="absolute inset-0 bg-gradient-to-t from-[#090C0A]/95 via-[#10271D]/75 to-[#10271D]/50 sm:hidden z-10" />
+        
+        {/* Bottom Fade to Next Section */}
+        <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-[#090C0A] via-[#10271D]/70 to-transparent z-10" />
+        
+        {/* Subtle Ambient Warmth on Right */}
+        <div className="absolute top-0 right-0 w-1/2 h-1/2 bg-[#C8913D]/10 rounded-full blur-3xl pointer-events-none z-10" />
       </motion.div>
 
       {/* Main Content Area */}
       <Container size="default" className="relative z-20 my-auto w-full">
         <motion.div style={{ opacity: contentOpacity }} className="max-w-3xl">
-          {/* Eyebrow & Technical Metadata Stamp */}
-          <motion.div
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.3, ease: [0.21, 0.47, 0.32, 0.98] }}
-            className="flex flex-wrap items-center gap-3 mb-6"
-          >
-            <Badge variant="amber" size="lg" dot>
-              AGRICULTURAL EQUIPMENT
-            </Badge>
-            <span className="text-[11px] font-mono tracking-widest text-[#D8D9D3]/70 uppercase">
-              01 // HEAVY-DUTY ENGINEERING
-            </span>
-          </motion.div>
-
-          {/* Main Headline Split Line Reveal */}
-          <div className="overflow-hidden mb-2">
-            <motion.h1
-              initial={{ y: "100%", opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              transition={{ duration: 0.75, delay: 0.45, ease: [0.21, 0.47, 0.32, 0.98] }}
-              className="text-display font-display tracking-tight text-[#F4F1E8]"
+          {/* Mobile Backplate Container for Crystal Clear Typography */}
+          <div className="bg-[#090C0A]/40 sm:bg-transparent backdrop-blur-[2px] sm:backdrop-blur-none p-5 sm:p-0 rounded-[20px] border border-white/10 sm:border-transparent">
+            {/* Eyebrow & Technical Metadata Stamp */}
+            <motion.div
+              initial={{ opacity: 0, y: 16 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.3, ease: [0.21, 0.47, 0.32, 0.98] }}
+              className="flex flex-wrap items-center gap-2.5 sm:gap-3 mb-4 sm:mb-6"
             >
-              ENGINEERED
-            </motion.h1>
-          </div>
+              <Badge variant="amber" size="lg" dot>
+                AGRICULTURAL EQUIPMENT
+              </Badge>
+              <span className="text-[10px] sm:text-[11px] font-mono tracking-widest text-[#D8D9D3]/80 uppercase">
+                01 // HEAVY-DUTY ENGINEERING
+              </span>
+            </motion.div>
 
-          <div className="overflow-hidden mb-6">
-            <motion.h1
-              initial={{ y: "100%", opacity: 0 }}
-              animate={{ y: 0, opacity: 1 }}
-              transition={{ duration: 0.75, delay: 0.6, ease: [0.21, 0.47, 0.32, 0.98] }}
-              className="text-display font-display tracking-tight text-[#C8913D]"
+            {/* Main Headline Split Line Reveal */}
+            <div className="overflow-hidden mb-1 sm:mb-2">
+              <motion.h1
+                initial={{ y: "100%", opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                transition={{ duration: 0.75, delay: 0.45, ease: [0.21, 0.47, 0.32, 0.98] }}
+                className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-display font-bold tracking-tight text-[#F4F1E8]"
+              >
+                ENGINEERED
+              </motion.h1>
+            </div>
+
+            <div className="overflow-hidden mb-4 sm:mb-6">
+              <motion.h1
+                initial={{ y: "100%", opacity: 0 }}
+                animate={{ y: 0, opacity: 1 }}
+                transition={{ duration: 0.75, delay: 0.6, ease: [0.21, 0.47, 0.32, 0.98] }}
+                className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-display font-bold tracking-tight text-[#C8913D]"
+              >
+                FOR THE FIELD.
+              </motion.h1>
+            </div>
+
+            {/* Supporting Text */}
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.65, delay: 0.8, ease: [0.21, 0.47, 0.32, 0.98] }}
+              className="text-sm sm:text-base md:text-lg text-[#D8D9D3] max-w-2xl leading-relaxed mb-6 sm:mb-10 font-sans"
             >
-              FOR THE FIELD.
-            </motion.h1>
+              Reliable agricultural implements and precision fabrication engineering built for
+              demanding field performance, high impact strength, and tractor compatibility.
+            </motion.p>
+
+            {/* Primary & Secondary Call to Actions */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.65, delay: 0.95, ease: [0.21, 0.47, 0.32, 0.98] }}
+              className="flex flex-wrap items-center gap-3 sm:gap-4"
+            >
+              <Link href="/products" className="w-full sm:w-auto">
+                <Button variant="amber" size="lg" showArrow className="w-full sm:w-auto">
+                  EXPLORE EQUIPMENT
+                </Button>
+              </Link>
+              <Link href="/contact" className="w-full sm:w-auto">
+                <Button variant="outline-light" size="lg" className="w-full sm:w-auto">
+                  CONTACT US
+                </Button>
+              </Link>
+            </motion.div>
           </div>
-
-          {/* Supporting Text */}
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.65, delay: 0.8, ease: [0.21, 0.47, 0.32, 0.98] }}
-            className="text-body-lg text-[#D8D9D3] max-w-2xl leading-relaxed mb-10 font-sans"
-          >
-            Reliable agricultural implements and precision fabrication engineering built for
-            demanding field performance, high impact strength, and tractor compatibility.
-          </motion.p>
-
-          {/* Primary & Secondary Call to Actions */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.65, delay: 0.95, ease: [0.21, 0.47, 0.32, 0.98] }}
-            className="flex flex-wrap items-center gap-4"
-          >
-            <Link href="/products">
-              <Button variant="amber" size="lg" showArrow>
-                EXPLORE EQUIPMENT
-              </Button>
-            </Link>
-            <Link href="/contact">
-              <Button variant="outline-light" size="lg">
-                CONTACT US
-              </Button>
-            </Link>
-          </motion.div>
         </motion.div>
       </Container>
 
