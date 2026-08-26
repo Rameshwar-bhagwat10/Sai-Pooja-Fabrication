@@ -1,4 +1,6 @@
 import { constructMetadata } from "@/lib/metadata";
+import { seoKeywordMap } from "@/config/seo";
+import { OrganizationSchema, LocalBusinessSchema } from "@/components/seo/structured-data";
 import { Hero } from "@/components/hero/hero";
 import { CompanyIntro } from "@/components/sections/company-intro";
 import { FeaturedProducts } from "@/components/sections/featured-products";
@@ -10,14 +12,19 @@ import { GalleryPreview } from "@/components/sections/gallery-preview";
 import { FinalCta } from "@/components/sections/final-cta";
 
 export const metadata = constructMetadata({
-  title: "Sai Pooja Fabrication | Heavy-Duty Agricultural Equipment & Implements",
-  description:
-    "Manufacturer of high-tensile agricultural machinery: Hydraulic Reversible Plough, Rigid Cultivator, Multi-Speed Rotavator, Farm Trailers, and custom tractor-mounted implements.",
+  title: seoKeywordMap.home.title,
+  description: seoKeywordMap.home.description,
+  canonical: "/",
+  keywords: seoKeywordMap.home.keywords,
 });
 
 export default function HomePage() {
   return (
     <>
+      {/* Search Engine Structured Data */}
+      <OrganizationSchema />
+      <LocalBusinessSchema />
+
       {/* 1. Hero — Dark / High-Contrast Image */}
       <Hero />
 

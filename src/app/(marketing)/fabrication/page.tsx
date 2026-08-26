@@ -1,4 +1,6 @@
 import { constructMetadata } from "@/lib/metadata";
+import { seoKeywordMap } from "@/config/seo";
+import { BreadcrumbsJsonLd } from "@/components/seo/structured-data";
 import { FabricationHero } from "@/components/fabrication/fabrication-hero";
 import { FabricationOverview } from "@/components/fabrication/fabrication-overview";
 import { CapabilityIndex } from "@/components/fabrication/capability-index";
@@ -10,14 +12,22 @@ import { RelatedEquipment } from "@/components/fabrication/related-equipment";
 import { FabricationCta } from "@/components/fabrication/fabrication-cta";
 
 export const metadata = constructMetadata({
-  title: "Fabrication Capabilities & Workshop Infrastructure | Sai Pooja Fabrication",
-  description:
-    "Explore our heavy structural fabrication plant, multi-pass MIG welding stations, CNC profile cutting, 5-stage manufacturing workflow, and custom agricultural equipment engineering.",
+  title: seoKeywordMap.fabrication.title,
+  description: seoKeywordMap.fabrication.description,
+  canonical: "/fabrication",
+  keywords: seoKeywordMap.fabrication.keywords,
 });
 
 export default function FabricationPage() {
+  const breadcrumbItems = [
+    { name: "Home", url: "/" },
+    { name: "Fabrication Capabilities", url: "/fabrication" },
+  ];
+
   return (
     <>
+      <BreadcrumbsJsonLd items={breadcrumbItems} />
+
       {/* 1. Fabrication Hero */}
       <FabricationHero />
 

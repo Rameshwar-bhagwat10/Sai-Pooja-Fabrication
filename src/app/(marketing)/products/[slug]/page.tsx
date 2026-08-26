@@ -8,6 +8,7 @@ import {
   getAdjacentProducts,
 } from "@/data/products";
 import { constructMetadata } from "@/lib/metadata";
+import { ProductJsonLd, BreadcrumbsJsonLd } from "@/components/seo/structured-data";
 import { ProductHero } from "@/components/products/product-hero";
 import { ProductOverview } from "@/components/products/product-overview";
 import { ProductFeatures } from "@/components/products/product-features";
@@ -36,8 +37,9 @@ export async function generateMetadata({
 
   if (!product) {
     return constructMetadata({
-      title: "Equipment Not Found | Sai Pooja Fabrication",
+      title: "Equipment Not Found",
       description: "The requested agricultural implement could not be found.",
+      noIndex: true,
     });
   }
 
@@ -45,6 +47,14 @@ export async function generateMetadata({
     title: `${product.name} | Sai Pooja Fabrication`,
     description: product.description,
     image: product.heroImage,
+    canonical: `/products/${product.slug}`,
+    keywords: [
+      product.name.toLowerCase(),
+      product.categoryName.toLowerCase(),
+      "agricultural implement",
+      "tractor implement",
+      "Sai Pooja Fabrication",
+    ],
   });
 }
 
@@ -59,31 +69,17 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
   const relatedProducts = getRelatedProducts(product);
   const { prev, next } = getAdjacentProducts(product.slug);
 
-  // Structured Data Schema for Search Engines
-  const jsonLd = {
-    "@context": "https://schema.org",
-    "@type": "Product",
-    name: product.name,
-    description: product.description,
-    image: product.heroImage,
-    category: product.categoryName,
-    brand: {
-      "@type": "Brand",
-      name: "Sai Pooja Fabrication",
-    },
-    manufacturer: {
-      "@type": "Organization",
-      name: "Sai Pooja Fabrication",
-    },
-  };
+  const breadcrumbItems = [
+    { name: "Home", url: "/" },
+    { name: "Products", url: "/products" },
+    { name: product.name, url: `/products/${product.slug}` },
+  ];
 
   return (
     <>
-      {/* Search Engine Structured Data */}
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-      />
+      {/* Search Engine Structured Data & Breadcrumbs */}
+      <ProductJsonLd product={product} />
+      <BreadcrumbsJsonLd items={breadcrumbItems} />
 
       {/* 1. Cinematic Detail Hero — Forest 900 / Charcoal */}
       <ProductHero product={product} />

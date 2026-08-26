@@ -1,5 +1,7 @@
 import * as React from "react";
 import { constructMetadata } from "@/lib/metadata";
+import { seoKeywordMap } from "@/config/seo";
+import { BreadcrumbsJsonLd } from "@/components/seo/structured-data";
 import { ContactHero } from "@/components/contact/contact-hero";
 import { ContactMethods } from "@/components/contact/contact-methods";
 import { InquirySection } from "@/components/contact/inquiry-section";
@@ -8,14 +10,22 @@ import { ContactFaq } from "@/components/contact/contact-faq";
 import { ContactCta } from "@/components/contact/contact-cta";
 
 export const metadata = constructMetadata({
-  title: "Contact & Factory Inquiries | Sai Pooja Fabrication",
-  description:
-    "Get in touch with Sai Pooja Fabrication. Request quotes for agricultural implements, tractor attachments, or custom fabrication engineering via WhatsApp, phone, or direct inquiry.",
+  title: seoKeywordMap.contact.title,
+  description: seoKeywordMap.contact.description,
+  canonical: "/contact",
+  keywords: seoKeywordMap.contact.keywords,
 });
 
 export default function ContactPage() {
+  const breadcrumbItems = [
+    { name: "Home", url: "/" },
+    { name: "Contact & Factory Inquiries", url: "/contact" },
+  ];
+
   return (
     <>
+      <BreadcrumbsJsonLd items={breadcrumbItems} />
+
       {/* 1. Contact Hero */}
       <ContactHero />
 

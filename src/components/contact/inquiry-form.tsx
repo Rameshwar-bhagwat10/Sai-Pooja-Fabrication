@@ -9,6 +9,7 @@ export interface InquiryFormProps {
   inquiryType: InquiryType;
   formData: InquiryFormData;
   errors: InquiryFormErrors;
+  isSubmitting?: boolean;
   onChange: (field: keyof InquiryFormData, value: string) => void;
   onSubmit: (e: React.FormEvent) => void;
 }
@@ -17,6 +18,7 @@ export function InquiryForm({
   inquiryType,
   formData,
   errors,
+  isSubmitting = false,
   onChange,
   onSubmit,
 }: InquiryFormProps) {
@@ -175,8 +177,15 @@ export function InquiryForm({
 
       {/* Submit Button */}
       <div className="pt-4">
-        <Button variant="amber" size="lg" type="submit" showArrow className="w-full sm:w-auto">
-          PREPARE ENQUIRY
+        <Button
+          variant="amber"
+          size="lg"
+          type="submit"
+          disabled={isSubmitting}
+          showArrow={!isSubmitting}
+          className="w-full sm:w-auto"
+        >
+          {isSubmitting ? "PREPARING..." : "PREPARE ENQUIRY"}
         </Button>
         <span className="text-[11px] font-mono text-[#D8D9D3]/60 block mt-2">
           Your inquiry details will be prepared for instant WhatsApp or Email transmission.

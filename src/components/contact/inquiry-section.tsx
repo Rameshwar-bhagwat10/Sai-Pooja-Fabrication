@@ -47,22 +47,8 @@ export function InquirySection() {
   });
 
   const [errors, setErrors] = React.useState<InquiryFormErrors>({});
+  const [isSubmitting, setIsSubmitting] = React.useState(false);
   const [isSubmitted, setIsSubmitted] = React.useState(false);
-
-  // Sync state if query params change
-  React.useEffect(() => {
-    if (typeParam === "custom-fabrication") {
-      setInquiryType("custom-fabrication");
-      setFormData((prev) => ({ ...prev, inquiryType: "custom-fabrication" }));
-    } else if (productParam && initialProduct) {
-      setInquiryType("product");
-      setFormData((prev) => ({
-        ...prev,
-        inquiryType: "product",
-        selectedProduct: initialProduct,
-      }));
-    }
-  }, [typeParam, productParam, initialProduct]);
 
   const handleTypeChange = (type: InquiryType) => {
     setInquiryType(type);
@@ -109,12 +95,17 @@ export function InquirySection() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (validateForm()) {
-      setIsSubmitted(true);
+      setIsSubmitting(true);
+      setTimeout(() => {
+        setIsSubmitting(false);
+        setIsSubmitted(true);
+      }, 400);
     }
   };
 
   const handleReset = () => {
     setIsSubmitted(false);
+    setIsSubmitting(false);
   };
 
   return (
@@ -144,6 +135,7 @@ export function InquirySection() {
                 inquiryType={inquiryType}
                 formData={formData}
                 errors={errors}
+                isSubmitting={isSubmitting}
                 onChange={handleFieldChange}
                 onSubmit={handleSubmit}
               />

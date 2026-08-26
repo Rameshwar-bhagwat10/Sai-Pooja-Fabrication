@@ -92,7 +92,7 @@ export function CapabilityIndex() {
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-[#151A17] via-transparent to-transparent" />
                 <div className="absolute top-3 left-3 px-2.5 py-1 rounded bg-black/75 backdrop-blur-sm text-[10px] font-mono text-[#C8913D] border border-white/10 font-bold">
-                  {activeCapability.number} // PREVIEW
+                  {`${activeCapability.number} // PREVIEW`}
                 </div>
               </div>
 

@@ -1,9 +1,23 @@
+"use client";
+
+import React, { useEffect } from "react";
 import Link from "next/link";
 import { Container } from "@/components/ui/container";
 import { Section } from "@/components/ui/section";
 import { Button } from "@/components/ui/button";
 
-export default function NotFound() {
+export default function GlobalError({
+  error,
+  reset,
+}: {
+  error: Error & { digest?: string };
+  reset: () => void;
+}) {
+  useEffect(() => {
+    // Log error cleanly for client diagnostics
+    console.error("Global Application Error:", error);
+  }, [error]);
+
   return (
     <Section
       surface="forest-900"
@@ -15,35 +29,37 @@ export default function NotFound() {
         <div className="text-center flex flex-col items-center max-w-xl mx-auto py-12">
           {/* Badge */}
           <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-[#173B2C] border border-[#C8913D]/40 text-[#C8913D] text-xs font-mono font-bold tracking-widest uppercase mb-6">
-            <span className="w-2 h-2 rounded-full bg-[#C8913D] animate-pulse" />
-            ERROR 404 • ROUTE NOT LOCATED
+            <span className="w-2 h-2 rounded-full bg-red-400 animate-ping" />
+            APPLICATION ERROR
           </div>
 
           {/* Heading */}
-          <h1 className="text-4xl sm:text-5xl md:text-6xl font-display font-bold text-[#F4F1E8] tracking-tight leading-tight mb-4">
-            Equipment or Page <span className="text-[#C8913D]">Not Found</span>
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-display font-bold text-[#F4F1E8] tracking-tight leading-tight mb-4">
+            Something Unexpected <span className="text-[#C8913D]">Occurred</span>
           </h1>
 
           {/* Subtext */}
           <p className="text-base sm:text-lg text-[#D8D9D3] leading-relaxed mb-10 max-w-md">
-            The page or agricultural implement record you requested has been moved, renamed, or does not exist in our catalog.
+            We encountered a temporary interface error. You can try refreshing the view or navigating back to our home page.
           </p>
 
           {/* Action Grid */}
           <div className="flex flex-col sm:flex-row items-center gap-4 w-full justify-center">
+            <Button
+              variant="amber"
+              size="lg"
+              onClick={() => reset()}
+              className="w-full sm:w-auto"
+            >
+              TRY AGAIN
+            </Button>
             <Link href="/" className="w-full sm:w-auto">
-              <Button variant="amber" size="lg" showArrow className="w-full sm:w-auto">
-                RETURN TO HOME
-              </Button>
-            </Link>
-            <Link href="/products" className="w-full sm:w-auto">
-              <Button variant="outline" size="lg" className="w-full sm:w-auto border-[#F4F1E8]/30 text-[#F4F1E8] hover:bg-[#173B2C]">
-                EXPLORE PRODUCTS
-              </Button>
-            </Link>
-            <Link href="/contact" className="w-full sm:w-auto">
-              <Button variant="ghost" size="lg" className="w-full sm:w-auto text-[#D8D9D3] hover:text-white">
-                CONTACT US
+              <Button
+                variant="outline"
+                size="lg"
+                className="w-full sm:w-auto border-[#F4F1E8]/30 text-[#F4F1E8] hover:bg-[#173B2C]"
+              >
+                RETURN HOME
               </Button>
             </Link>
           </div>

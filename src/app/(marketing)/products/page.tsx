@@ -1,19 +1,34 @@
 import * as React from "react";
 import { constructMetadata } from "@/lib/metadata";
+import { seoKeywordMap } from "@/config/seo";
 import { ALL_PRODUCTS } from "@/data/products";
+import { CollectionPageJsonLd } from "@/components/seo/structured-data";
 import { ProductsHero } from "@/components/products/products-hero";
 import { ProductsCatalogueView } from "@/components/products/products-catalogue-view";
 import { FinalCta } from "@/components/sections/final-cta";
 
 export const metadata = constructMetadata({
-  title: "Agricultural Equipment & Machinery | Sai Pooja Fabrication",
-  description:
-    "Explore our complete range of tractor-mounted agricultural implements: Hydraulic Reversible Ploughs, Rotary Tillers, Cultivators, Disc Harrows, Seed Drills, Farm Trailers, and Custom Implements.",
+  title: seoKeywordMap.products.title,
+  description: seoKeywordMap.products.description,
+  canonical: "/products",
+  keywords: seoKeywordMap.products.keywords,
 });
 
 export default function ProductsPage() {
+  const collectionItems = ALL_PRODUCTS.map((prod) => ({
+    name: prod.name,
+    url: `/products/${prod.slug}`,
+  }));
+
   return (
     <>
+      {/* Search Engine Structured Data */}
+      <CollectionPageJsonLd
+        name="Agricultural Implements & Machinery"
+        description={seoKeywordMap.products.description}
+        items={collectionItems}
+      />
+
       {/* 1. Products Hero */}
       <ProductsHero />
 

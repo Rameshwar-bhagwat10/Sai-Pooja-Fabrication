@@ -1,4 +1,6 @@
 import { constructMetadata } from "@/lib/metadata";
+import { seoKeywordMap } from "@/config/seo";
+import { BreadcrumbsJsonLd } from "@/components/seo/structured-data";
 import { AboutHero } from "@/components/about/about-hero";
 import { WhoWeAre } from "@/components/about/who-we-are";
 import { CompanyStory } from "@/components/about/company-story";
@@ -10,14 +12,22 @@ import { FabricationPreview } from "@/components/sections/fabrication-preview";
 import { AboutCta } from "@/components/about/about-cta";
 
 export const metadata = constructMetadata({
-  title: "About Us | Sai Pooja Fabrication",
-  description:
-    "Learn about Sai Pooja Fabrication — manufacturing durable agricultural equipment, tractor-mounted implements, and precision structural steel fabrication built for demanding field conditions.",
+  title: seoKeywordMap.about.title,
+  description: seoKeywordMap.about.description,
+  canonical: "/about",
+  keywords: seoKeywordMap.about.keywords,
 });
 
 export default function AboutPage() {
+  const breadcrumbItems = [
+    { name: "Home", url: "/" },
+    { name: "About Us", url: "/about" },
+  ];
+
   return (
     <>
+      <BreadcrumbsJsonLd items={breadcrumbItems} />
+
       {/* 1. About Hero */}
       <AboutHero />
 
