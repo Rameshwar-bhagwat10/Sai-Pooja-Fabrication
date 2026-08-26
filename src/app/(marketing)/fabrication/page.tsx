@@ -1,17 +1,49 @@
-import { Container } from "@/components/ui/container";
-import { Section, SectionHeading } from "@/components/ui/section";
+import { constructMetadata } from "@/lib/metadata";
+import { FabricationHero } from "@/components/fabrication/fabrication-hero";
+import { FabricationOverview } from "@/components/fabrication/fabrication-overview";
+import { CapabilityIndex } from "@/components/fabrication/capability-index";
+import { ProcessTimeline } from "@/components/fabrication/process-timeline";
+import { WorkshopShowcase } from "@/components/fabrication/workshop-showcase";
+import { CustomFabrication } from "@/components/fabrication/custom-fabrication";
+import { VisualProof } from "@/components/fabrication/visual-proof";
+import { RelatedEquipment } from "@/components/fabrication/related-equipment";
+import { FabricationCta } from "@/components/fabrication/fabrication-cta";
+
+export const metadata = constructMetadata({
+  title: "Fabrication Capabilities & Workshop Infrastructure | Sai Pooja Fabrication",
+  description:
+    "Explore our heavy structural fabrication plant, multi-pass MIG welding stations, CNC profile cutting, 5-stage manufacturing workflow, and custom agricultural equipment engineering.",
+});
 
 export default function FabricationPage() {
   return (
-    <Section surface="charcoal" spacing="default" isDarkSurface>
-      <Container>
-        <SectionHeading
-          eyebrow="Workshop Capabilities"
-          title="Industrial Fabrication Engineering"
-          description="Precision cutting, robotic welding, and custom agricultural implements fabrication."
-          isDarkSurface
-        />
-      </Container>
-    </Section>
+    <>
+      {/* 1. Fabrication Hero */}
+      <FabricationHero />
+
+      {/* 2. Fabrication Overview */}
+      <FabricationOverview />
+
+      {/* 3. Interactive Capability Index */}
+      <CapabilityIndex />
+
+      {/* 4. 5-Stage Fabrication Process Timeline */}
+      <ProcessTimeline />
+
+      {/* 5. Workshop Infrastructure & Plant Tooling */}
+      <WorkshopShowcase />
+
+      {/* 6. Custom Fabrication Section */}
+      <CustomFabrication />
+
+      {/* 7. Visual Proof: Workshop -> Machine -> Field */}
+      <VisualProof />
+
+      {/* 8. Manufactured Equipment Showcase */}
+      <RelatedEquipment />
+
+      {/* 9. Final Fabrication Consultation CTA */}
+      <FabricationCta />
+    </>
   );
 }
