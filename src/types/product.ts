@@ -56,5 +56,6 @@ export interface ProductItem {
   relatedProductSlugs: string[];
   warranty?: string;
   isFeatured?: boolean;
+  imageRole?: "client-owned" | "representative";
   order: number;
 }

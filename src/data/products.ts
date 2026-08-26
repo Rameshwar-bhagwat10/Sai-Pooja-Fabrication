@@ -23,6 +23,7 @@ export const ALL_PRODUCTS: ProductItem[] = [
     ],
     suitableForTractorHp: "45-75 HP",
     warranty: "1 Year Structural Warranty",
+    imageRole: "representative",
     specifications: [
       { label: "Main Frame", value: "Heavy Seamless Box Section (100x100x8 mm)" },
       { label: "Turnover Operation", value: "Dual-Acting Hydraulic Cylinder 180°" },
@@ -97,6 +98,7 @@ export const ALL_PRODUCTS: ProductItem[] = [
     ],
     suitableForTractorHp: "35-55 HP",
     warranty: "1 Year Structural Warranty",
+    imageRole: "representative",
     specifications: [
       { label: "Main Frame", value: "Heavy ISMB Steel Channel (75x40 mm)" },
       { label: "Tine Configuration", value: "9 or 11 Rigid Tines (Staggered)" },
@@ -245,6 +247,7 @@ export const ALL_PRODUCTS: ProductItem[] = [
     ],
     suitableForTractorHp: "35-50 HP",
     warranty: "1 Year Structural Warranty",
+    imageRole: "representative",
     specifications: [
       { label: "Frame", value: "Heavy Seamless Box Section (65x65 mm)" },
       { label: "Tines", value: "Heavy Forged Spring Steel Tines" },
@@ -391,6 +394,7 @@ export const ALL_PRODUCTS: ProductItem[] = [
     ],
     suitableForTractorHp: "35-50 HP",
     warranty: "1 Year Structural Warranty",
+    imageRole: "representative",
     specifications: [
       { label: "Frame", value: "Heavy Square Hollow Section (75x75 mm)" },
       { label: "Number of Bottoms", value: "2 or 3 Furrow Bottoms" },
@@ -464,6 +468,7 @@ export const ALL_PRODUCTS: ProductItem[] = [
     ],
     suitableForTractorHp: "35-65 HP",
     warranty: "1 Year Structural Warranty",
+    imageRole: "representative",
     specifications: [
       { label: "Mouldboard Width", value: "6 ft, 7 ft, or 8 ft (1800 - 2400 mm)" },
       { label: "Mouldboard Sheet", value: "8 mm Heavy Rolled Structural Plate" },
@@ -685,6 +690,7 @@ export const ALL_PRODUCTS: ProductItem[] = [
     ],
     suitableForTractorHp: "Custom Tailored (30 - 90+ HP)",
     warranty: "1 Year Structural Warranty",
+    imageRole: "representative",
     specifications: [
       { label: "Fabrication Standard", value: "High-Tensile ISMB / Heavy Tubular Steel" },
       { label: "Welding Process", value: "Multi-Pass MIG Welding & Ultrasonic Testing" },

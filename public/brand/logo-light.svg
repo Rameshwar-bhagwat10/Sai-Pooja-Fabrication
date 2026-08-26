@@ -1,0 +1,11 @@
+<svg width="260" height="60" viewBox="0 0 260 60" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Mark Frame -->
+  <rect x="2" y="8" width="44" height="44" rx="10" fill="#173B2C"/>
+  <path d="M12 41L24 18L36 41H28L24 31L20 41H12Z" fill="#F4F1E8"/>
+  <path d="M17 37L24 23L31 37" stroke="#173B2C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="24" cy="32" r="3" fill="#C8913D"/>
+  
+  <!-- Wordmark -->
+  <text x="58" y="31" fill="#F4F1E8" font-family="Space Grotesk, system-ui, -apple-system, sans-serif" font-size="19" font-weight="700" letter-spacing="-0.03em">SAI POOJA</text>
+  <text x="59" y="45" fill="#C8913D" font-family="Inter, system-ui, -apple-system, sans-serif" font-size="9.5" font-weight="700" letter-spacing="0.28em">FABRICATION</text>
+</svg>

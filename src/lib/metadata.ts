@@ -5,7 +5,7 @@ export const siteConfig = {
   description:
     "Premium agricultural implements and precision fabrication engineering. Built for strength, durability, and modern agricultural performance.",
   url: process.env.NEXT_PUBLIC_SITE_URL || "https://saipoojafabrication.com",
-  ogImage: "/images/branding/og-image.jpg",
+  ogImage: "/images/og/og-image.svg",
   locale: "en_IN",
   author: "Sai Pooja Fabrication",
 };
@@ -24,6 +24,14 @@ export function constructMetadata({
   return {
     title: title ? `${title} | ${siteConfig.name}` : siteConfig.name,
     description,
+    icons: {
+      icon: [
+        { url: "/icon.svg", type: "image/svg+xml" },
+        { url: "/favicon.svg", type: "image/svg+xml" },
+      ],
+      apple: [{ url: "/brand/logo-mark.svg" }],
+    },
+    manifest: "/manifest.webmanifest",
     openGraph: {
       title: title ? `${title} | ${siteConfig.name}` : siteConfig.name,
       description,
