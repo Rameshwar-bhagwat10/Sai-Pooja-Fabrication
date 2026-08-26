@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" width="100%" height="100%">
+  <rect width="100%" height="100%" fill="#10271D"/>
+  <g transform="translate(400, 270)">
+    <!-- Dual Seed & Fertilizer Hopper -->
+    <polygon points="-220,-80 220,-80 180,40 -180,40" fill="#252C28" stroke="#C8913D" stroke-width="3"/>
+    <line x1="-20" y1="-80" x2="-20" y2="40" stroke="#CBD5E1" stroke-width="2"/>
+    <!-- Metering Tubes & Boot Openers -->
+    <g transform="translate(-150, 40)"><line x1="0" y1="0" x2="-20" y2="120" stroke="#CBD5E1" stroke-width="6"/><polygon points="-25,120 -15,140 -5,120" fill="#C8913D"/></g>
+    <g transform="translate(-50, 40)"><line x1="0" y1="0" x2="-10" y2="120" stroke="#CBD5E1" stroke-width="6"/><polygon points="-15,120 -5,140 5,120" fill="#C8913D"/></g>
+    <g transform="translate(50, 40)"><line x1="0" y1="0" x2="10" y2="120" stroke="#CBD5E1" stroke-width="6"/><polygon points="5,120 15,140 25,120" fill="#C8913D"/></g>
+    <g transform="translate(150, 40)"><line x1="0" y1="0" x2="20" y2="120" stroke="#CBD5E1" stroke-width="6"/><polygon points="15,120 25,140 35,120" fill="#C8913D"/></g>
+    <!-- Ground Drive Wheel -->
+    <circle cx="210" cy="90" r="45" fill="none" stroke="#64748B" stroke-width="8"/>
+    <circle cx="210" cy="90" r="14" fill="#C8913D"/>
+  </g>
+  <text x="40" y="550" fill="#F4F1E8" font-family="'Space Grotesk', sans-serif" font-size="20" font-weight="700">AUTOMATIC SEED CUM FERTILIZER DRILL</text>
+</svg>

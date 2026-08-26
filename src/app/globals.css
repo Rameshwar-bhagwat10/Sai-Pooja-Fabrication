@@ -1,26 +1,256 @@
 @import "tailwindcss";
 
+@theme {
+  /* Fonts */
+  --font-display: var(--font-space-grotesk), ui-sans-serif, system-ui, sans-serif;
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+
+  /* Primary Brand Colors */
+  --color-forest-900: #10271D;
+  --color-forest-800: #173B2C;
+  --color-forest-600: #2F6B45;
+
+  /* Neutral Palette */
+  --color-pure-black: #090C0A;
+  --color-charcoal: #151A17;
+  --color-slate-dark: #252C28;
+  --color-warm-gray: #6E746F;
+  --color-light-gray: #D8D9D3;
+  --color-warm-white: #F4F1E8;
+  --color-soft-white: #FAFAF7;
+
+  /* Accent Color (Forge Amber) */
+  --color-amber-forge: #C8913D;
+
+  /* Semantic Colors */
+  --color-semantic-success: #3D8B5A;
+  --color-semantic-warning: #C8913D;
+  --color-semantic-error: #B84A45;
+  --color-semantic-info: #557A91;
+
+  /* Border Radii */
+  --radius-xs: 4px;
+  --radius-sm: 8px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --radius-xl: 18px;
+  --radius-2xl: 24px;
+  --radius-full: 9999px;
+
+  /* Transitions & Timing */
+  --ease-out-custom: cubic-bezier(0.21, 0.47, 0.32, 0.98);
+  --ease-in-out-custom: cubic-bezier(0.65, 0, 0.35, 1);
+}
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* Core Base Variables */
+  --background: #FAFAF7;
+  --foreground: #151A17;
+
+  /* Card */
+  --card: #FFFFFF;
+  --card-foreground: #151A17;
+
+  /* Popover */
+  --popover: #FFFFFF;
+  --popover-foreground: #151A17;
+
+  /* Primary (Forest 800 / Forest 600) */
+  --primary: #173B2C;
+  --primary-foreground: #F4F1E8;
+
+  /* Secondary (Warm White / Charcoal) */
+  --secondary: #F4F1E8;
+  --secondary-foreground: #151A17;
+
+  /* Muted */
+  --muted: #F4F1E8;
+  --muted-foreground: #6E746F;
+
+  /* Accent (Forge Amber) */
+  --accent: #C8913D;
+  --accent-foreground: #090C0A;
+
+  /* Destructive */
+  --destructive: #B84A45;
+  --destructive-foreground: #FAFAF7;
+
+  /* Borders, Inputs, Ring */
+  --border: rgba(21, 26, 23, 0.12);
+  --input: rgba(21, 26, 23, 0.16);
+  --ring: #C8913D;
+
+  --radius: 10px;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+/* ==========================================================================
+   SURFACE RHYTHM SYSTEM
+   ========================================================================== */
+
+.surface-soft-white {
+  background-color: var(--color-soft-white);
+  color: var(--color-charcoal);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+.surface-warm-white {
+  background-color: var(--color-warm-white);
+  color: var(--color-charcoal);
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+.surface-charcoal {
+  background-color: var(--color-charcoal);
+  color: var(--color-warm-white);
+}
+
+.surface-forest-900 {
+  background-color: var(--color-forest-900);
+  color: var(--color-warm-white);
+}
+
+.surface-forest-800 {
+  background-color: var(--color-forest-800);
+  color: var(--color-warm-white);
+}
+
+.surface-dark {
+  background-color: var(--color-pure-black);
+  color: var(--color-warm-white);
+}
+
+/* ==========================================================================
+   TYPOGRAPHY UTILITIES
+   ========================================================================== */
+
+.font-display {
+  font-family: var(--font-display);
+}
+
+.font-sans {
+  font-family: var(--font-sans);
+}
+
+.text-display {
+  font-family: var(--font-display);
+  font-size: clamp(3.5rem, 7vw, 7.5rem);
+  line-height: 1.02;
+  letter-spacing: -0.035em;
+  font-weight: 700;
+}
+
+.text-h1 {
+  font-family: var(--font-display);
+  font-size: clamp(2.75rem, 5vw, 5rem);
+  line-height: 1.08;
+  letter-spacing: -0.025em;
+  font-weight: 700;
+}
+
+.text-h2 {
+  font-family: var(--font-display);
+  font-size: clamp(2rem, 3.5vw, 3.25rem);
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  font-weight: 600;
+}
+
+.text-h3 {
+  font-family: var(--font-display);
+  font-size: clamp(1.35rem, 2vw, 2rem);
+  line-height: 1.25;
+  letter-spacing: -0.015em;
+  font-weight: 600;
+}
+
+.text-body-lg {
+  font-family: var(--font-sans);
+  font-size: 1.25rem;
+  line-height: 1.6;
+}
+
+.text-body {
+  font-family: var(--font-sans);
+  font-size: 1rem;
+  line-height: 1.65;
+}
+
+.text-small {
+  font-family: var(--font-sans);
+  font-size: 0.875rem;
+  line-height: 1.5;
+}
+
+.text-micro {
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
+  line-height: 1.4;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  font-weight: 600;
+}
+
+/* ==========================================================================
+   INTERACTIVE UTILITIES & MICRO-ANIMATIONS
+   ========================================================================== */
+
+.focus-ring {
+  outline: none;
+  transition: box-shadow 0.2s cubic-bezier(0.21, 0.47, 0.32, 0.98);
+}
+
+.focus-ring:focus-visible {
+  box-shadow: 0 0 0 2px var(--color-amber-forge), 0 0 0 4px rgba(200, 145, 61, 0.25);
+}
+
+.hover-lift {
+  transition: transform 0.2s cubic-bezier(0.21, 0.47, 0.32, 0.98), box-shadow 0.2s cubic-bezier(0.21, 0.47, 0.32, 0.98);
+}
+
+.hover-lift:hover {
+  transform: translateY(-2px);
+}
+
+.hover-lift:active {
+  transform: scale(0.98);
+}
+
+.group:hover .arrow-slide {
+  transform: translateX(6px);
+}
+
+.arrow-slide {
+  transition: transform 0.2s cubic-bezier(0.21, 0.47, 0.32, 0.98);
+}
+
+/* Subtle Industrial Grid Pattern Background */
+.bg-industrial-grid {
+  background-size: 32px 32px;
+  background-image: 
+    linear-gradient(to right, rgba(21, 26, 23, 0.04) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(21, 26, 23, 0.04) 1px, transparent 1px);
+}
+
+.bg-industrial-grid-dark {
+  background-size: 32px 32px;
+  background-image: 
+    linear-gradient(to right, rgba(244, 241, 232, 0.05) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(244, 241, 232, 0.05) 1px, transparent 1px);
+}
+
+/* Custom Minimalist Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #10271D;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #252C28;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #2F6B45;
 }

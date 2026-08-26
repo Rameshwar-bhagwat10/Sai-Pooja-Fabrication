@@ -1,0 +1,72 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1080" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#10271D"/>
+      <stop offset="50%" stop-color="#173B2C"/>
+      <stop offset="100%" stop-color="#090C0A"/>
+    </linearGradient>
+    <linearGradient id="steel" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#64748B"/>
+      <stop offset="50%" stop-color="#CBD5E1"/>
+      <stop offset="100%" stop-color="#334155"/>
+    </linearGradient>
+    <linearGradient id="amber" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#F59E0B"/>
+      <stop offset="100%" stop-color="#C8913D"/>
+    </linearGradient>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M 40 0 L 0 0 0 40" fill="none" stroke="rgba(244,241,232,0.05)" stroke-width="1"/>
+    </pattern>
+  </defs>
+  <rect width="100%" height="100%" fill="url(#bg)"/>
+  <rect width="100%" height="100%" fill="url(#grid)"/>
+  
+  <!-- Soil Furrows / Farmland Perspective -->
+  <g opacity="0.35">
+    <path d="M 0 1080 L 700 650 L 1220 650 L 1920 1080 Z" fill="#151A17"/>
+    <path d="M 100 1080 L 750 650" stroke="#C8913D" stroke-width="2" stroke-dasharray="10 15"/>
+    <path d="M 400 1080 L 850 650" stroke="#2F6B45" stroke-width="2"/>
+    <path d="M 700 1080 L 960 650" stroke="#C8913D" stroke-width="3"/>
+    <path d="M 1200 1080 L 1050 650" stroke="#2F6B45" stroke-width="2"/>
+    <path d="M 1500 1080 L 1150 650" stroke="#C8913D" stroke-width="2" stroke-dasharray="10 15"/>
+  </g>
+
+  <!-- Heavy Machinery / Agricultural Implement Blueprint & Silhouette -->
+  <g transform="translate(960, 480)">
+    <!-- Heavy Box Frame -->
+    <rect x="-420" y="-120" width="840" height="140" rx="12" fill="url(#steel)" stroke="#C8913D" stroke-width="4" filter="drop-shadow(0px 20px 40px rgba(0,0,0,0.7))"/>
+    <rect x="-380" y="-80" width="760" height="60" rx="6" fill="#10271D" stroke="rgba(255,255,255,0.2)" stroke-width="2"/>
+    
+    <!-- 3-Point Linkage Mast CAT-II -->
+    <polygon points="0,-320 -120,-80 120,-80" fill="url(#steel)" stroke="#C8913D" stroke-width="3"/>
+    <circle cx="0" cy="-290" r="22" fill="#090C0A" stroke="#C8913D" stroke-width="4"/>
+    <circle cx="-100" cy="-60" r="18" fill="#090C0A" stroke="#C8913D" stroke-width="3"/>
+    <circle cx="100" cy="-60" r="18" fill="#090C0A" stroke="#C8913D" stroke-width="3"/>
+    
+    <!-- Hydraulic Reversible Turnover Cylinder -->
+    <rect x="-35" y="-230" width="70" height="160" rx="8" fill="#1E293B" stroke="#CBD5E1" stroke-width="3"/>
+    <rect x="-15" y="-130" width="30" height="120" fill="url(#steel)"/>
+    
+    <!-- Heavy Plough Bottoms / Boron Steel Blades -->
+    <g transform="translate(-320, 60)">
+      <path d="M 0 0 L -60 180 L 40 220 L 80 40 Z" fill="url(#amber)" stroke="#090C0A" stroke-width="3"/>
+      <path d="M -60 180 L -120 280 L 0 270 Z" fill="#CBD5E1" stroke="#C8913D" stroke-width="3"/>
+    </g>
+    <g transform="translate(-100, 60)">
+      <path d="M 0 0 L -60 180 L 40 220 L 80 40 Z" fill="url(#amber)" stroke="#090C0A" stroke-width="3"/>
+      <path d="M -60 180 L -120 280 L 0 270 Z" fill="#CBD5E1" stroke="#C8913D" stroke-width="3"/>
+    </g>
+    <g transform="translate(120, 60)">
+      <path d="M 0 0 L -60 180 L 40 220 L 80 40 Z" fill="url(#amber)" stroke="#090C0A" stroke-width="3"/>
+      <path d="M -60 180 L -120 280 L 0 270 Z" fill="#CBD5E1" stroke="#C8913D" stroke-width="3"/>
+    </g>
+    <g transform="translate(340, 60)">
+      <path d="M 0 0 L -60 180 L 40 220 L 80 40 Z" fill="url(#amber)" stroke="#090C0A" stroke-width="3"/>
+      <path d="M -60 180 L -120 280 L 0 270 Z" fill="#CBD5E1" stroke="#C8913D" stroke-width="3"/>
+    </g>
+  </g>
+  
+  <!-- Technical Branding Watermark -->
+  <text x="120" y="980" fill="#C8913D" font-family="'Space Grotesk', sans-serif" font-size="28" font-weight="700" letter-spacing="4">SAI POOJA FABRICATION // HEAVY-DUTY AGRICULTURAL ENGINEERING</text>
+  <text x="120" y="1015" fill="#D8D9D3" font-family="monospace" font-size="14" opacity="0.6">HIGH-TENSILE BORON STEEL • CAT-II LINKAGE • PRECISION HYDRAULIC REVERSIBLE</text>
+</svg>
