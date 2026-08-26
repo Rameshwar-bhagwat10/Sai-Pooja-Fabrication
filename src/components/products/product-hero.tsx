@@ -12,6 +12,7 @@ import { FadeUp } from "@/components/animations/fade-up";
 import { TextReveal } from "@/components/animations/text-reveal";
 import { type ProductItem } from "@/types/product";
 import { useReducedMotion } from "@/hooks/use-reduced-motion";
+import { COMPANY_INFO } from "@/data/company";
 
 export interface ProductHeroProps {
   product: ProductItem;
@@ -98,7 +99,7 @@ export function ProductHero({ product }: ProductHeroProps) {
                 </Button>
               </Link>
               <a
-                href={`https://wa.me/919422200000?text=${encodeURIComponent(
+                href={`https://wa.me/${COMPANY_INFO.whatsapp}?text=${encodeURIComponent(
                   `Hello Sai Pooja Fabrication, I am interested in specifications and details for ${product.name}.`
                 )}`}
                 target="_blank"

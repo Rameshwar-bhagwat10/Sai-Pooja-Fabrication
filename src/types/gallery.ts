@@ -1,10 +1,9 @@
 export type GalleryCategory =
   | "all"
-  | "workshop"
+  | "equipment"
   | "fabrication"
-  | "products"
-  | "field-trial"
-  | "delivery";
+  | "workshop"
+  | "field";
 
 export interface GalleryItem {
   id: string;
@@ -13,7 +12,10 @@ export interface GalleryItem {
   categoryLabel: string;
   image: string;
   thumbnail?: string;
-  description?: string;
-  location?: string;
-  date?: string;
+  description: string;
+  productSlug?: string;
+  productName?: string;
+  featured?: boolean;
+  aspectRatio?: "16/9" | "4/3" | "1/1" | "3/2";
+  order: number;
 }
