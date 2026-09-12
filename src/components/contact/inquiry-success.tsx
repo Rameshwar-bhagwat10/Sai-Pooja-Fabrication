@@ -9,9 +9,12 @@ import { Button } from "@/components/ui/button";
 export interface InquirySuccessProps {
   formData: InquiryFormData;
   onReset: () => void;
+  company?: typeof COMPANY_INFO;
 }
 
-export function InquirySuccess({ formData, onReset }: InquirySuccessProps) {
+export function InquirySuccess({ formData, onReset, company = COMPANY_INFO }: InquirySuccessProps) {
+  const activeCompany = company || COMPANY_INFO;
+
   // Construct formatted WhatsApp message
   const whatsappText = `Hello Sai Pooja Fabrication,
 
@@ -25,7 +28,7 @@ ${formData.email ? `• Email: ${formData.email}` : ""}
 Requirement:
 ${formData.requirement}`;
 
-  const whatsappUrl = `https://wa.me/${COMPANY_INFO.whatsapp}?text=${encodeURIComponent(whatsappText)}`;
+  const whatsappUrl = `https://wa.me/${activeCompany.whatsapp}?text=${encodeURIComponent(whatsappText)}`;
 
   // Construct formatted mailto link
   const emailSubject = `Inquiry: ${formData.selectedProduct || formData.inquiryType.toUpperCase()} - ${formData.name}`;
@@ -41,7 +44,7 @@ Requirement:
 ${formData.requirement}
 `;
 
-  const mailtoUrl = `mailto:${COMPANY_INFO.email}?subject=${encodeURIComponent(emailSubject)}&body=${encodeURIComponent(emailBody)}`;
+  const mailtoUrl = `mailto:${activeCompany.email}?subject=${encodeURIComponent(emailSubject)}&body=${encodeURIComponent(emailBody)}`;
 
   return (
     <div className="p-8 sm:p-10 rounded-[20px] bg-[#173B2C] border border-[#C8913D]/50 text-[#F4F1E8] shadow-2xl flex flex-col gap-6 animate-fade-in">
@@ -104,11 +107,11 @@ ${formData.requirement}
 
       <div className="flex items-center justify-between pt-4 border-t border-white/10 flex-wrap gap-4 text-xs font-mono">
         <a
-          href={`tel:${COMPANY_INFO.phone.replace(/[^0-9+]/g, "")}`}
+          href={`tel:${activeCompany.phone.replace(/[^0-9+]/g, "")}`}
           className="text-[#D8D9D3] hover:text-[#C8913D] flex items-center gap-1.5 transition-colors"
         >
           <Phone className="w-3.5 h-3.5" />
-          <span>Or call directly: {COMPANY_INFO.phone}</span>
+          <span>Or call directly: {activeCompany.phone}</span>
         </a>
 
         <button

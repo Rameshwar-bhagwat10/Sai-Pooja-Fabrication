@@ -9,6 +9,7 @@ import {
   AlertCircle,
   Star,
   X,
+  Edit2,
 } from "lucide-react";
 import { type GalleryItem, type GalleryCategory } from "@/types/gallery";
 
@@ -77,6 +78,86 @@ export function GalleryManager({ initialItems }: GalleryManagerProps) {
       showNotification("error", err.message || "Failed to add photograph.");
     } finally {
       setIsSaving(false);
+    }
+  };
+
+  const [editingItem, setEditingItem] = React.useState<GalleryItem | null>(null);
+  const [isEditModalOpen, setIsEditModalOpen] = React.useState(false);
+
+  const handleStartEdit = (item: GalleryItem) => {
+    setEditingItem({ ...item });
+    setIsEditModalOpen(true);
+  };
+
+  const handleUpdate = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!editingItem || !editingItem.title.trim() || !editingItem.image.trim()) {
+      showNotification("error", "Title and Image URL are required.");
+      return;
+    }
+
+    setIsSaving(true);
+    try {
+      const res = await fetch(`/api/gallery/${editingItem.id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          ...editingItem,
+          title: editingItem.title.trim(),
+          image: editingItem.image.trim(),
+          description: editingItem.description?.trim() || "",
+        }),
+      });
+
+      const data = await res.json();
+      if (!res.ok || !data.success) {
+        throw new Error(data.error || "Failed to update photograph");
+      }
+
+      setItems((prev) =>
+        prev.map((item) => (item.id === editingItem.id ? data.item : item))
+      );
+      setIsEditModalOpen(false);
+      setEditingItem(null);
+      showNotification("success", "Photograph updated successfully.");
+    } catch (err: any) {
+      console.error("Gallery update error:", err);
+      showNotification("error", err.message || "Failed to update photograph.");
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
+  const handleToggleFeatured = async (id: string, current: boolean) => {
+    const nextVal = !current;
+    const item = items.find((i) => i.id === id);
+    if (!item) return;
+
+    try {
+      const res = await fetch(`/api/gallery/${id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          ...item,
+          featured: nextVal,
+        }),
+      });
+
+      const data = await res.json();
+      if (!res.ok || !data.success) {
+        throw new Error(data.error || "Failed to toggle featured status");
+      }
+
+      setItems((prev) =>
+        prev.map((i) => (i.id === id ? { ...i, featured: nextVal } : i))
+      );
+      showNotification(
+        "success",
+        nextVal ? "Photograph spotlighted as Featured." : "Photograph removed from Featured."
+      );
+    } catch (err: any) {
+      console.error("Featured toggle error:", err);
+      showNotification("error", err.message || "Failed to toggle featured status.");
     }
   };
 
@@ -175,20 +256,38 @@ export function GalleryManager({ initialItems }: GalleryManagerProps) {
                 }}
               />
 
-              {item.featured && (
-                <span className="absolute top-2.5 left-2.5 px-2 py-0.5 rounded-full bg-amber-500 text-white text-[10px] font-mono font-bold flex items-center gap-1 shadow-sm">
-                  <Star className="w-3 h-3 fill-current" />
-                  <span>Featured</span>
-                </span>
-              )}
-
               <button
-                onClick={() => handleDelete(item.id, item.title)}
-                title="Remove photo"
-                className="absolute top-2.5 right-2.5 p-1.5 rounded-lg bg-white/80 hover:bg-rose-600 hover:text-white text-slate-700 transition-colors shadow-xs cursor-pointer"
+                type="button"
+                onClick={() => handleToggleFeatured(item.id, Boolean(item.featured))}
+                title={item.featured ? "Click to unfeature" : "Click to feature"}
+                className={`absolute top-2.5 left-2.5 px-2 py-0.5 rounded-full text-[10px] font-mono font-bold flex items-center gap-1 shadow-sm transition-all cursor-pointer ${
+                  item.featured
+                    ? "bg-amber-500 text-white hover:bg-amber-600"
+                    : "bg-black/50 backdrop-blur-xs text-white/80 hover:bg-black/75 hover:text-white"
+                }`}
               >
-                <Trash2 className="w-3.5 h-3.5" />
+                <Star className={`w-3 h-3 ${item.featured ? "fill-current" : ""}`} />
+                <span>{item.featured ? "Featured" : "Feature"}</span>
               </button>
+
+              <div className="absolute top-2.5 right-2.5 flex items-center gap-1">
+                <button
+                  type="button"
+                  onClick={() => handleStartEdit(item)}
+                  title="Edit photograph details"
+                  className="p-1.5 rounded-lg bg-white/90 hover:bg-amber-600 hover:text-white text-slate-700 transition-colors shadow-xs cursor-pointer"
+                >
+                  <Edit2 className="w-3.5 h-3.5" />
+                </button>
+                <button
+                  type="button"
+                  onClick={() => handleDelete(item.id, item.title)}
+                  title="Remove photograph"
+                  className="p-1.5 rounded-lg bg-white/90 hover:bg-rose-600 hover:text-white text-slate-700 transition-colors shadow-xs cursor-pointer"
+                >
+                  <Trash2 className="w-3.5 h-3.5" />
+                </button>
+              </div>
             </div>
 
             {/* Content */}
@@ -324,6 +423,148 @@ export function GalleryManager({ initialItems }: GalleryManagerProps) {
                   className="px-6 py-2 rounded-xl bg-amber-600 hover:bg-amber-700 text-white font-bold text-xs uppercase tracking-wider disabled:opacity-50 cursor-pointer shadow-xs"
                 >
                   {isSaving ? "Saving..." : "Add Photograph"}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* Edit Photograph Modal */}
+      {isEditModalOpen && editingItem && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/40 backdrop-blur-xs">
+          <div className="w-full max-w-lg rounded-2xl bg-white border border-slate-200 p-6 sm:p-8 space-y-5 shadow-2xl relative max-h-[90vh] overflow-y-auto">
+            <div className="flex items-center justify-between border-b border-slate-100 pb-4">
+              <div className="flex items-center gap-2">
+                <Edit2 className="w-5 h-5 text-amber-600" />
+                <h3 className="text-base font-bold text-slate-900 font-mono uppercase">
+                  Edit Showroom Photograph
+                </h3>
+              </div>
+              <button
+                type="button"
+                onClick={() => {
+                  setIsEditModalOpen(false);
+                  setEditingItem(null);
+                }}
+                className="p-1 rounded-lg text-slate-400 hover:text-slate-700 hover:bg-slate-100 cursor-pointer"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            <form onSubmit={handleUpdate} className="space-y-4 text-xs font-mono">
+              <div>
+                <label className="block text-slate-700 uppercase mb-1.5 font-bold">Photo Title *</label>
+                <input
+                  type="text"
+                  value={editingItem.title}
+                  onChange={(e) =>
+                    setEditingItem({ ...editingItem, title: e.target.value })
+                  }
+                  required
+                  className="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 border border-slate-300 text-slate-900 placeholder-slate-400 text-xs focus:outline-none focus:bg-white focus:border-amber-600 focus:ring-2 focus:ring-amber-500/15"
+                />
+              </div>
+
+              <div>
+                <label className="block text-slate-700 uppercase mb-1.5 font-bold">Category *</label>
+                <select
+                  value={editingItem.category}
+                  onChange={(e) =>
+                    setEditingItem({
+                      ...editingItem,
+                      category: e.target.value as GalleryCategory,
+                      categoryLabel: e.target.value.toUpperCase(),
+                    })
+                  }
+                  className="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 border border-slate-300 text-slate-900 text-xs focus:outline-none focus:bg-white focus:border-amber-600"
+                >
+                  <option value="equipment">Finished Agricultural Equipment</option>
+                  <option value="fabrication">Steel Fabrication & Welding</option>
+                  <option value="workshop">Workshop Infrastructure & Tooling</option>
+                  <option value="field">Field Operations & Farmer Testing</option>
+                </select>
+              </div>
+
+              <div>
+                <label className="block text-slate-700 uppercase mb-1.5 font-bold">Image Path or URL *</label>
+                <input
+                  type="text"
+                  value={editingItem.image}
+                  onChange={(e) =>
+                    setEditingItem({ ...editingItem, image: e.target.value })
+                  }
+                  required
+                  className="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 border border-slate-300 text-slate-900 placeholder-slate-400 text-xs focus:outline-none focus:bg-white focus:border-amber-600 focus:ring-2 focus:ring-amber-500/15"
+                />
+              </div>
+
+              <div>
+                <label className="block text-slate-700 uppercase mb-1.5 font-bold">Description (Optional)</label>
+                <textarea
+                  rows={2}
+                  value={editingItem.description || ""}
+                  onChange={(e) =>
+                    setEditingItem({ ...editingItem, description: e.target.value })
+                  }
+                  className="w-full px-3.5 py-2 rounded-xl bg-slate-50 border border-slate-300 text-slate-900 placeholder-slate-400 text-xs focus:outline-none focus:bg-white focus:border-amber-600"
+                />
+              </div>
+
+              <div className="grid grid-cols-2 gap-4 pt-1">
+                <div>
+                  <label className="block text-slate-700 uppercase mb-1.5 font-bold">Aspect Ratio</label>
+                  <select
+                    value={editingItem.aspectRatio || "16/9"}
+                    onChange={(e) =>
+                      setEditingItem({
+                        ...editingItem,
+                        aspectRatio: e.target.value as any,
+                      })
+                    }
+                    className="w-full px-3 py-2 rounded-xl bg-slate-50 border border-slate-300 text-slate-900 text-xs focus:outline-none focus:bg-white focus:border-amber-600"
+                  >
+                    <option value="16/9">16 : 9 (Widescreen)</option>
+                    <option value="4/3">4 : 3 (Standard)</option>
+                    <option value="1/1">1 : 1 (Square)</option>
+                    <option value="3/2">3 : 2 (Photo)</option>
+                  </select>
+                </div>
+
+                <div className="flex items-center gap-2 pt-6">
+                  <input
+                    id="edit-featured-checkbox"
+                    type="checkbox"
+                    checked={Boolean(editingItem.featured)}
+                    onChange={(e) =>
+                      setEditingItem({ ...editingItem, featured: e.target.checked })
+                    }
+                    className="w-4 h-4 rounded border-slate-300 text-amber-600 focus:ring-amber-500 cursor-pointer"
+                  />
+                  <label htmlFor="edit-featured-checkbox" className="text-slate-800 text-xs cursor-pointer font-bold">
+                    Featured in Showroom
+                  </label>
+                </div>
+              </div>
+
+              <div className="flex justify-end gap-3 pt-4 border-t border-slate-100">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setIsEditModalOpen(false);
+                    setEditingItem(null);
+                  }}
+                  className="px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs cursor-pointer font-medium"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  disabled={isSaving}
+                  className="px-6 py-2 rounded-xl bg-amber-600 hover:bg-amber-700 text-white font-bold text-xs uppercase tracking-wider disabled:opacity-50 cursor-pointer shadow-xs"
+                >
+                  {isSaving ? "Updating..." : "Save Changes"}
                 </button>
               </div>
             </form>

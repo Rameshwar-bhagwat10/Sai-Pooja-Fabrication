@@ -10,7 +10,12 @@ import { FadeUp } from "@/components/animations/fade-up";
 import { TextReveal } from "@/components/animations/text-reveal";
 import { COMPANY_INFO } from "@/data/company";
 
-export function FabricationCta() {
+export interface FabricationCtaProps {
+  company?: typeof COMPANY_INFO;
+}
+
+export function FabricationCta({ company = COMPANY_INFO }: FabricationCtaProps = {}) {
+  const activeCompany = company || COMPANY_INFO;
   const whatsappMessage = encodeURIComponent(
     "Hello Sai Pooja Fabrication, I would like to inquire about your workshop fabrication capabilities and custom implement manufacturing."
   );
@@ -46,7 +51,7 @@ export function FabricationCta() {
             </Link>
 
             <a
-              href={`https://wa.me/${COMPANY_INFO.whatsapp}?text=${whatsappMessage}`}
+              href={`https://wa.me/${activeCompany.whatsapp}?text=${whatsappMessage}`}
               target="_blank"
               rel="noopener noreferrer"
             >

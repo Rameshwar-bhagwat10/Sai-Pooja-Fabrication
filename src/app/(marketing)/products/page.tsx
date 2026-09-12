@@ -16,8 +16,8 @@ export const metadata = constructMetadata({
   keywords: seoKeywordMap.products.keywords,
 });
 
-export default function ProductsPage() {
-  const products = getAllProducts();
+export default async function ProductsPage() {
+  const products = await getAllProducts();
   const collectionItems = products.map((prod) => ({
     name: prod.name,
     url: `/products/${prod.slug}`,

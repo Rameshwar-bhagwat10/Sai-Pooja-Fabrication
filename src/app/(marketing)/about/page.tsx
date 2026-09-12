@@ -11,6 +11,10 @@ import { AboutVisualStory } from "@/components/about/about-visual-story";
 import { FabricationPreview } from "@/components/sections/fabrication-preview";
 import { AboutCta } from "@/components/about/about-cta";
 
+import { getAllCompanyApproachPillars, getSiteSettings } from "@/lib/db";
+
+export const dynamic = "force-dynamic";
+
 export const metadata = constructMetadata({
   title: seoKeywordMap.about.title,
   description: seoKeywordMap.about.description,
@@ -18,7 +22,12 @@ export const metadata = constructMetadata({
   keywords: seoKeywordMap.about.keywords,
 });
 
-export default function AboutPage() {
+export default async function AboutPage() {
+  const [pillars, settings] = await Promise.all([
+    getAllCompanyApproachPillars(),
+    getSiteSettings(),
+  ]);
+
   const breadcrumbItems = [
     { name: "Home", url: "/" },
     { name: "About Us", url: "/about" },
@@ -32,7 +41,7 @@ export default function AboutPage() {
       <AboutHero />
 
       {/* 2. Who We Are */}
-      <WhoWeAre />
+      <WhoWeAre company={settings.company} />
 
       {/* 3. Company Story */}
       <CompanyStory />
@@ -44,7 +53,7 @@ export default function AboutPage() {
       <WhatWeBuild />
 
       {/* 6. Our Manufacturing Approach */}
-      <OurApproach />
+      <OurApproach initialPillars={pillars} />
 
       {/* 7. Visual Story: Workshop -> Machine -> Field */}
       <AboutVisualStory />

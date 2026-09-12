@@ -4,9 +4,15 @@ import * as React from "react";
 import { Container } from "@/components/ui/container";
 import { Section, SectionHeading } from "@/components/ui/section";
 import { Stagger, StaggerItem } from "@/components/animations/stagger";
-import { COMPANY_APPROACH } from "@/data/company";
+import { COMPANY_APPROACH, type CompanyApproachPillar } from "@/data/company";
 
-export function OurApproach() {
+interface OurApproachProps {
+  initialPillars?: CompanyApproachPillar[];
+}
+
+export function OurApproach({ initialPillars }: OurApproachProps = {}) {
+  const pillars = initialPillars && initialPillars.length > 0 ? initialPillars : COMPANY_APPROACH;
+
   return (
     <Section surface="charcoal" spacing="default" hasGridPattern isDarkSurface>
       <Container size="default">
@@ -20,7 +26,7 @@ export function OurApproach() {
 
         {/* Numbered Approach Grid */}
         <Stagger className="mt-14 grid grid-cols-1 md:grid-cols-2 gap-8">
-          {COMPANY_APPROACH.map((item) => (
+          {pillars.map((item) => (
             <StaggerItem key={item.number}>
               <div className="group h-full p-8 sm:p-10 rounded-[16px] bg-[#10271D]/60 border border-white/10 hover:border-[#C8913D]/50 hover:bg-[#10271D]/90 transition-all duration-300 flex flex-col justify-between">
                 <div>

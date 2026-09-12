@@ -7,9 +7,17 @@ import { Container } from "@/components/ui/container";
 import { Section, SectionHeading } from "@/components/ui/section";
 import { FABRICATION_CAPABILITIES, type FabricationCapability } from "@/data/capabilities";
 
-export function CapabilityIndex() {
+interface CapabilityIndexProps {
+  initialCapabilities?: FabricationCapability[];
+}
+
+export function CapabilityIndex({ initialCapabilities }: CapabilityIndexProps = {}) {
+  const capabilities = initialCapabilities && initialCapabilities.length > 0
+    ? initialCapabilities
+    : FABRICATION_CAPABILITIES;
+
   const [activeCapability, setActiveCapability] = React.useState<FabricationCapability>(
-    FABRICATION_CAPABILITIES[0]
+    capabilities[0]
   );
 
   return (
@@ -27,7 +35,7 @@ export function CapabilityIndex() {
         <div className="mt-14 grid grid-cols-1 lg:grid-cols-12 gap-10 items-start">
           {/* Left Column: Interactive Capability List (7 cols) */}
           <div className="lg:col-span-7 flex flex-col gap-4">
-            {FABRICATION_CAPABILITIES.map((cap) => {
+            {capabilities.map((cap) => {
               const isActive = activeCapability.id === cap.id;
               return (
                 <button

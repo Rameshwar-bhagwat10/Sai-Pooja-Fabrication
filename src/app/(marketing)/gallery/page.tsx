@@ -6,6 +6,10 @@ import { GalleryView } from "@/components/gallery/gallery-view";
 import { FeaturedGallery } from "@/components/gallery/featured-gallery";
 import { GalleryCta } from "@/components/gallery/gallery-cta";
 
+import { getAllGalleryItems } from "@/lib/db";
+
+export const dynamic = "force-dynamic";
+
 export const metadata = constructMetadata({
   title: seoKeywordMap.gallery.title,
   description: seoKeywordMap.gallery.description,
@@ -13,7 +17,9 @@ export const metadata = constructMetadata({
   keywords: seoKeywordMap.gallery.keywords,
 });
 
-export default function GalleryPage() {
+export default async function GalleryPage() {
+  const items = await getAllGalleryItems();
+
   const breadcrumbItems = [
     { name: "Home", url: "/" },
     { name: "Gallery", url: "/gallery" },
@@ -27,7 +33,7 @@ export default function GalleryPage() {
       <GalleryHero />
 
       {/* 2. Interactive Category Filter, Dynamic Editorial Grid & Lightbox */}
-      <GalleryView />
+      <GalleryView initialItems={items} />
 
       {/* 3. Featured Showcase */}
       <FeaturedGallery />

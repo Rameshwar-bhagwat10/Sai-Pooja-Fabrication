@@ -11,6 +11,10 @@ import { VisualProof } from "@/components/fabrication/visual-proof";
 import { RelatedEquipment } from "@/components/fabrication/related-equipment";
 import { FabricationCta } from "@/components/fabrication/fabrication-cta";
 
+import { getAllCapabilities, getAllFabricationSteps, getAllProducts, getSiteSettings } from "@/lib/db";
+
+export const dynamic = "force-dynamic";
+
 export const metadata = constructMetadata({
   title: seoKeywordMap.fabrication.title,
   description: seoKeywordMap.fabrication.description,
@@ -18,7 +22,14 @@ export const metadata = constructMetadata({
   keywords: seoKeywordMap.fabrication.keywords,
 });
 
-export default function FabricationPage() {
+export default async function FabricationPage() {
+  const [capabilities, fabricationSteps, products, settings] = await Promise.all([
+    getAllCapabilities(),
+    getAllFabricationSteps(),
+    getAllProducts(),
+    getSiteSettings(),
+  ]);
+
   const breadcrumbItems = [
     { name: "Home", url: "/" },
     { name: "Fabrication Capabilities", url: "/fabrication" },
@@ -35,10 +46,10 @@ export default function FabricationPage() {
       <FabricationOverview />
 
       {/* 3. Interactive Capability Index */}
-      <CapabilityIndex />
+      <CapabilityIndex initialCapabilities={capabilities} />
 
       {/* 4. 5-Stage Fabrication Process Timeline */}
-      <ProcessTimeline />
+      <ProcessTimeline initialSteps={fabricationSteps} />
 
       {/* 5. Workshop Infrastructure & Plant Tooling */}
       <WorkshopShowcase />
@@ -50,10 +61,10 @@ export default function FabricationPage() {
       <VisualProof />
 
       {/* 8. Manufactured Equipment Showcase */}
-      <RelatedEquipment />
+      <RelatedEquipment products={products} />
 
       {/* 9. Final Fabrication Consultation CTA */}
-      <FabricationCta />
+      <FabricationCta company={settings.company} />
     </>
   );
 }

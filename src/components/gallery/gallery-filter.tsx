@@ -1,18 +1,21 @@
 "use client";
 
 import * as React from "react";
-import { type GalleryCategory } from "@/types/gallery";
+import { type GalleryCategory, type GalleryItem } from "@/types/gallery";
 import { GALLERY_CATEGORIES, GALLERY_ITEMS } from "@/data/gallery";
 
 export interface GalleryFilterProps {
   activeCategory: GalleryCategory;
   onSelectCategory: (category: GalleryCategory) => void;
+  items?: GalleryItem[];
 }
 
-export function GalleryFilter({ activeCategory, onSelectCategory }: GalleryFilterProps) {
+export function GalleryFilter({ activeCategory, onSelectCategory, items }: GalleryFilterProps) {
+  const currentItems = items && items.length > 0 ? items : GALLERY_ITEMS;
+
   const getCount = (cat: GalleryCategory) => {
-    if (cat === "all") return GALLERY_ITEMS.length;
-    return GALLERY_ITEMS.filter((item) => item.category === cat).length;
+    if (cat === "all") return currentItems.length;
+    return currentItems.filter((item) => item.category === cat).length;
   };
 
   return (

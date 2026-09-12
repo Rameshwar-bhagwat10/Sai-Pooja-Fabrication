@@ -8,9 +8,14 @@ import { ProductCard } from "@/components/products/product-card";
 import { Button } from "@/components/ui/button";
 import { Stagger, StaggerItem } from "@/components/animations/stagger";
 import { getFeaturedProducts } from "@/data/products";
+import { type ProductItem } from "@/types/product";
 
-export function RelatedEquipment() {
-  const products = getFeaturedProducts().slice(0, 3);
+interface RelatedEquipmentProps {
+  products?: ProductItem[];
+}
+
+export function RelatedEquipment({ products: initialProducts }: RelatedEquipmentProps = {}) {
+  const products = (initialProducts && initialProducts.length > 0 ? initialProducts : getFeaturedProducts()).slice(0, 3);
 
   return (
     <Section surface="warm-white" spacing="default">

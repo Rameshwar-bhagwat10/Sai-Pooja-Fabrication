@@ -7,8 +7,13 @@ import { Section, SectionHeading } from "@/components/ui/section";
 import { Stagger, StaggerItem } from "@/components/animations/stagger";
 import { COMPANY_INFO } from "@/data/company";
 
-export function ContactMethods() {
-  const whatsappUrl = `https://wa.me/${COMPANY_INFO.whatsapp}?text=${encodeURIComponent(
+export interface ContactMethodsProps {
+  company?: typeof COMPANY_INFO;
+}
+
+export function ContactMethods({ company = COMPANY_INFO }: ContactMethodsProps = {}) {
+  const activeCompany = company || COMPANY_INFO;
+  const whatsappUrl = `https://wa.me/${activeCompany.whatsapp}?text=${encodeURIComponent(
     "Hello Sai Pooja Fabrication, I would like to inquire about your agricultural implements and fabrication capabilities."
   )}`;
 
@@ -18,7 +23,7 @@ export function ContactMethods() {
       title: "WHATSAPP CONSULTATION",
       subtitle: "Instant response for pricing, photos, and quick quotes",
       actionText: "Chat on WhatsApp",
-      detail: `+91 ${COMPANY_INFO.whatsapp.slice(-10, -5)} ${COMPANY_INFO.whatsapp.slice(-5)}`,
+      detail: `+91 ${activeCompany.whatsapp.slice(-10, -5)} ${activeCompany.whatsapp.slice(-5)}`,
       href: whatsappUrl,
       isExternal: true,
       icon: MessageSquare,
@@ -29,8 +34,8 @@ export function ContactMethods() {
       title: "DIRECT WORKSHOP CALL",
       subtitle: "Speak directly with our technical fabrication engineers",
       actionText: "Call Now",
-      detail: COMPANY_INFO.phone,
-      href: `tel:${COMPANY_INFO.phone.replace(/[^0-9+]/g, "")}`,
+      detail: activeCompany.phone,
+      href: `tel:${activeCompany.phone.replace(/[^0-9+]/g, "")}`,
       isExternal: false,
       icon: Phone,
       accentColor: "text-[#C8913D]",
@@ -40,8 +45,8 @@ export function ContactMethods() {
       title: "EMAIL INQUIRY",
       subtitle: "Send formal tender specs, implement drawings, or bulk orders",
       actionText: "Send Email",
-      detail: COMPANY_INFO.email,
-      href: `mailto:${COMPANY_INFO.email}`,
+      detail: activeCompany.email,
+      href: `mailto:${activeCompany.email}`,
       isExternal: false,
       icon: Mail,
       accentColor: "text-[#151A17]",
@@ -51,7 +56,7 @@ export function ContactMethods() {
       title: "WORKSHOP & MANUFACTURING PLANT",
       subtitle: "Visit our fabrication plant during working hours",
       actionText: "Visit Guidelines",
-      detail: `${COMPANY_INFO.address.line1}, ${COMPANY_INFO.address.city}, ${COMPANY_INFO.address.country}`,
+      detail: `${activeCompany.address.line1}, ${activeCompany.address.city}, ${activeCompany.address.country}`,
       href: "#workshop-location",
       isExternal: false,
       icon: MapPin,

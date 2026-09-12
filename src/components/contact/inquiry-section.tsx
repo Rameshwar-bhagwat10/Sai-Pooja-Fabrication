@@ -10,10 +10,20 @@ import { InquiryTypeSelector } from "./inquiry-type-selector";
 import { InquiryForm } from "./inquiry-form";
 import { InquirySuccess } from "./inquiry-success";
 
-export function InquirySection() {
+import { type ProductItem } from "@/types/product";
+import { COMPANY_INFO } from "@/data/company";
+
+export interface InquirySectionProps {
+  products?: ProductItem[];
+  company?: typeof COMPANY_INFO;
+}
+
+export function InquirySection({ products = ALL_PRODUCTS, company = COMPANY_INFO }: InquirySectionProps = {}) {
   const searchParams = useSearchParams();
   const productParam = searchParams.get("product");
   const typeParam = searchParams.get("type");
+
+  const productList = products && products.length > 0 ? products : ALL_PRODUCTS;
 
   // Determine initial inquiry type and product from query parameters safely
   const initialType: InquiryType = React.useMemo(() => {
@@ -26,14 +36,14 @@ export function InquirySection() {
 
   const initialProduct = React.useMemo(() => {
     if (!productParam) return "";
-    const matched = ALL_PRODUCTS.find(
+    const matched = productList.find(
       (p) =>
         p.slug.toLowerCase() === productParam.toLowerCase() ||
         p.name.toLowerCase().includes(productParam.toLowerCase()) ||
         productParam.toLowerCase().includes(p.slug.toLowerCase())
     );
     return matched ? matched.name : "";
-  }, [productParam]);
+  }, [productParam, productList]);
 
   const [inquiryType, setInquiryType] = React.useState<InquiryType>(initialType);
   const [formData, setFormData] = React.useState<InquiryFormData>({
@@ -134,7 +144,7 @@ export function InquirySection() {
 
         <div className="mt-12 p-6 sm:p-10 rounded-[20px] bg-[#151A17] border border-white/10 shadow-2xl">
           {isSubmitted ? (
-            <InquirySuccess formData={formData} onReset={handleReset} />
+            <InquirySuccess formData={formData} onReset={handleReset} company={company} />
           ) : (
             <div className="flex flex-col gap-8">
               {/* Step 1: Inquiry Type Selector */}
@@ -149,6 +159,7 @@ export function InquirySection() {
                 formData={formData}
                 errors={errors}
                 isSubmitting={isSubmitting}
+                products={productList}
                 onChange={handleFieldChange}
                 onSubmit={handleSubmit}
               />

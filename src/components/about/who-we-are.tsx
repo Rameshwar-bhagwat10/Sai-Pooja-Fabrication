@@ -10,7 +10,13 @@ import { ImageReveal } from "@/components/animations/image-reveal";
 import { TextReveal } from "@/components/animations/text-reveal";
 import { COMPANY_INFO } from "@/data/company";
 
-export function WhoWeAre() {
+export interface WhoWeAreProps {
+  company?: typeof COMPANY_INFO;
+}
+
+export function WhoWeAre({ company = COMPANY_INFO }: WhoWeAreProps = {}) {
+  const activeCompany = company || COMPANY_INFO;
+
   return (
     <Section surface="warm-white" spacing="default">
       <Container size="default">
@@ -34,13 +40,13 @@ export function WhoWeAre() {
 
             <FadeUp delay={0.2}>
               <p className="text-body-lg text-[#151A17] leading-relaxed mb-6 font-medium font-sans">
-                {COMPANY_INFO.longDescription}
+                {activeCompany.longDescription}
               </p>
             </FadeUp>
 
             <FadeUp delay={0.3}>
               <p className="text-body text-[#6E746F] leading-relaxed mb-8 font-sans">
-                {COMPANY_INFO.philosophy}
+                {activeCompany.philosophy}
               </p>
             </FadeUp>
 

@@ -4,9 +4,15 @@ import * as React from "react";
 import { Container } from "@/components/ui/container";
 import { Section, SectionHeading } from "@/components/ui/section";
 import { Stagger, StaggerItem } from "@/components/animations/stagger";
-import { FABRICATION_PROCESS } from "@/data/fabrication-process";
+import { FABRICATION_PROCESS, type FabricationProcessStep } from "@/data/fabrication-process";
 
-export function ProcessTimeline() {
+interface ProcessTimelineProps {
+  initialSteps?: FabricationProcessStep[];
+}
+
+export function ProcessTimeline({ initialSteps }: ProcessTimelineProps = {}) {
+  const steps = initialSteps && initialSteps.length > 0 ? initialSteps : FABRICATION_PROCESS;
+
   return (
     <Section surface="warm-white" spacing="default">
       <Container size="default">
@@ -19,7 +25,7 @@ export function ProcessTimeline() {
 
         {/* Timeline Steps Layout */}
         <Stagger className="mt-14 grid grid-cols-1 md:grid-cols-5 gap-6 relative">
-          {FABRICATION_PROCESS.map((step, index) => (
+          {steps.map((step, index) => (
             <StaggerItem key={step.step} className="flex flex-col">
               <div className="h-full p-6 sm:p-7 rounded-[16px] bg-white border border-black/10 shadow-sm flex flex-col justify-between hover:border-[#2F6B45]/50 transition-colors">
                 <div>

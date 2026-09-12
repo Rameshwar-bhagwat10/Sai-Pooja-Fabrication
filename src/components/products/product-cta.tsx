@@ -13,9 +13,11 @@ import { COMPANY_INFO } from "@/data/company";
 
 export interface ProductCtaProps {
   product: ProductItem;
+  company?: typeof COMPANY_INFO;
 }
 
-export function ProductCta({ product }: ProductCtaProps) {
+export function ProductCta({ product, company = COMPANY_INFO }: ProductCtaProps) {
+  const activeCompany = company || COMPANY_INFO;
   const whatsappMessage = encodeURIComponent(
     `Hello Sai Pooja Fabrication, I would like to inquire about specifications and pricing for ${product.name} (Tractor HP: ${product.suitableForTractorHp || "Standard"}).`
   );
@@ -51,7 +53,7 @@ export function ProductCta({ product }: ProductCtaProps) {
             </Link>
 
             <a
-              href={`https://wa.me/${COMPANY_INFO.whatsapp}?text=${whatsappMessage}`}
+              href={`https://wa.me/${activeCompany.whatsapp}?text=${whatsappMessage}`}
               target="_blank"
               rel="noopener noreferrer"
             >

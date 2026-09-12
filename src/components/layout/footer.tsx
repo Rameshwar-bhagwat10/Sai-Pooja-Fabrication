@@ -8,7 +8,13 @@ import { Logo } from "./logo";
 import { PRODUCT_CATEGORIES } from "@/data/navigation";
 import { COMPANY_INFO } from "@/data/company";
 
-export function Footer() {
+export interface FooterProps {
+  company?: typeof COMPANY_INFO;
+}
+
+export function Footer({ company = COMPANY_INFO }: FooterProps = {}) {
+  const activeCompany = company || COMPANY_INFO;
+
   return (
     <footer className="w-full bg-[#10271D] text-[#F4F1E8] border-t border-white/10 pt-20 pb-12">
       <Container size="default">
@@ -92,30 +98,30 @@ export function Footer() {
             </h4>
             <div className="flex flex-col gap-3 text-small text-[#D8D9D3]">
               <a
-                href={`tel:${COMPANY_INFO.phone}`}
+                href={`tel:${activeCompany.phone}`}
                 className="hover:text-white transition-colors flex items-center gap-2"
               >
                 <Phone className="w-4 h-4 text-[#C8913D] shrink-0" />
-                <span>{COMPANY_INFO.phone}</span>
+                <span>{activeCompany.phone}</span>
               </a>
 
               <a
-                href={`mailto:${COMPANY_INFO.email}`}
+                href={`mailto:${activeCompany.email}`}
                 className="hover:text-white transition-colors flex items-center gap-2"
               >
                 <Mail className="w-4 h-4 text-[#C8913D] shrink-0" />
-                <span className="truncate">{COMPANY_INFO.email}</span>
+                <span className="truncate">{activeCompany.email}</span>
               </a>
 
               <div className="flex items-start gap-2 pt-1 text-xs text-[#D8D9D3]/80">
                 <MapPin className="w-4 h-4 text-[#C8913D] shrink-0 mt-0.5" />
                 <span>
-                  {COMPANY_INFO.address.line1}, {COMPANY_INFO.address.city}, {COMPANY_INFO.address.country}
+                  {activeCompany.address.line1}, {activeCompany.address.city}, {activeCompany.address.country}
                 </span>
               </div>
 
               <a
-                href={`https://wa.me/${COMPANY_INFO.whatsapp}`}
+                href={`https://wa.me/${activeCompany.whatsapp}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="mt-2 inline-flex items-center gap-2 px-3.5 py-2 rounded-[8px] bg-[#2F6B45] text-white text-xs font-semibold hover:bg-[#3D8B5A] transition-colors"

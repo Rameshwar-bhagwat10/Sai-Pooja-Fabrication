@@ -5,8 +5,8 @@ import { GalleryManager } from "@/components/admin/gallery-manager";
 
 export const dynamic = "force-dynamic";
 
-export default function AdminGalleryPage() {
-  const galleryItems = getAllGalleryItems();
+export default async function AdminGalleryPage() {
+  const galleryItems = await getAllGalleryItems();
 
   return (
     <div>

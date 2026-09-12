@@ -1,7 +1,7 @@
 import * as React from "react";
 import { type Metadata } from "next";
 import { notFound } from "next/navigation";
-import { getProductBySlug, getAllProducts } from "@/lib/db";
+import { getProductBySlug, getAllProducts, getSiteSettings } from "@/lib/db";
 import { type ProductItem } from "@/types/product";
 import { constructMetadata } from "@/lib/metadata";
 
@@ -41,7 +41,7 @@ interface ProductPageProps {
 }
 
 export async function generateStaticParams() {
-  const products = getAllProducts();
+  const products = await getAllProducts();
   return products.map((product) => ({
     slug: product.slug,
   }));
@@ -51,7 +51,7 @@ export async function generateMetadata({
   params,
 }: ProductPageProps): Promise<Metadata> {
   const { slug } = await params;
-  const product = getProductBySlug(slug);
+  const product = await getProductBySlug(slug);
 
   if (!product) {
     return constructMetadata({
@@ -78,13 +78,16 @@ export async function generateMetadata({
 
 export default async function ProductDetailPage({ params }: ProductPageProps) {
   const { slug } = await params;
-  const product = getProductBySlug(slug);
+  const product = await getProductBySlug(slug);
 
   if (!product) {
     notFound();
   }
 
-  const allProducts = getAllProducts();
+  const [allProducts, settings] = await Promise.all([
+    getAllProducts(),
+    getSiteSettings(),
+  ]);
   const relatedProducts = getDynamicRelatedProducts(product, allProducts);
   const { prev, next } = getDynamicAdjacentProducts(product.slug, allProducts);
 
@@ -101,7 +104,7 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
       <BreadcrumbsJsonLd items={breadcrumbItems} />
 
       {/* 1. Cinematic Detail Hero — Forest 900 / Charcoal */}
-      <ProductHero product={product} />
+      <ProductHero product={product} company={settings.company} />
 
       {/* 2. Engineering Overview — Warm White */}
       <ProductOverview product={product} />
@@ -125,7 +128,7 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
       <ProductNavigation prevProduct={prev} nextProduct={next} />
 
       {/* 9. Direct Factory Inquiry CTA — Forest 900 */}
-      <ProductCta product={product} />
+      <ProductCta product={product} company={settings.company} />
     </>
   );
 }

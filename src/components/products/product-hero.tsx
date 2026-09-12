@@ -16,9 +16,11 @@ import { COMPANY_INFO } from "@/data/company";
 
 export interface ProductHeroProps {
   product: ProductItem;
+  company?: typeof COMPANY_INFO;
 }
 
-export function ProductHero({ product }: ProductHeroProps) {
+export function ProductHero({ product, company = COMPANY_INFO }: ProductHeroProps) {
+  const activeCompany = company || COMPANY_INFO;
   const prefersReduced = useReducedMotion();
 
   return (
@@ -99,7 +101,7 @@ export function ProductHero({ product }: ProductHeroProps) {
                 </Button>
               </Link>
               <a
-                href={`https://wa.me/${COMPANY_INFO.whatsapp}?text=${encodeURIComponent(
+                href={`https://wa.me/${activeCompany.whatsapp}?text=${encodeURIComponent(
                   `Hello Sai Pooja Fabrication, I am interested in specifications and details for ${product.name}.`
                 )}`}
                 target="_blank"

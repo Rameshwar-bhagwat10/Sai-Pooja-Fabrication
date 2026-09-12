@@ -52,6 +52,32 @@ export function ProductsManager({ initialProducts }: ProductsManagerProps) {
     }
   };
 
+  const handleToggleFeatured = async (id: string, current: boolean) => {
+    const nextVal = !current;
+    try {
+      const res = await fetch(`/api/products/${id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ isFeatured: nextVal }),
+      });
+      const data = await res.json();
+      if (!res.ok || !data.success) {
+        throw new Error(data.error || "Failed to update featured status");
+      }
+
+      setProducts((prev) =>
+        prev.map((p) => (p.id === id ? { ...p, isFeatured: nextVal } : p))
+      );
+      showNotification(
+        "success",
+        nextVal ? "Product marked as Featured." : "Product removed from Featured."
+      );
+    } catch (err: any) {
+      console.error("Featured toggle failed:", err);
+      showNotification("error", err.message || "Failed to update featured status.");
+    }
+  };
+
   // Filter products based on search and category
   const filteredProducts = products.filter((prod) => {
     const matchesSearch =
@@ -211,14 +237,24 @@ export function ProductsManager({ initialProducts }: ProductsManagerProps) {
 
                       {/* Featured */}
                       <td className="py-4 px-4">
-                        {product.isFeatured ? (
-                          <span className="inline-flex items-center gap-1 text-xs font-mono text-amber-800 bg-amber-50 px-2 py-0.5 rounded border border-amber-200 font-medium">
-                            <Star className="w-3 h-3 fill-amber-500 text-amber-500" />
-                            <span>Featured</span>
-                          </span>
-                        ) : (
-                          <span className="text-xs font-mono text-slate-300">—</span>
-                        )}
+                        <button
+                          type="button"
+                          onClick={() => handleToggleFeatured(product.id, Boolean(product.isFeatured))}
+                          title={product.isFeatured ? "Click to remove from featured" : "Click to feature this implement"}
+                          className="inline-flex items-center gap-1.5 text-xs font-mono px-2.5 py-1 rounded-lg border transition-all cursor-pointer hover:scale-105"
+                        >
+                          {product.isFeatured ? (
+                            <span className="inline-flex items-center gap-1 text-amber-800 bg-amber-50 font-bold">
+                              <Star className="w-3.5 h-3.5 fill-amber-500 text-amber-500" />
+                              <span>Featured</span>
+                            </span>
+                          ) : (
+                            <span className="inline-flex items-center gap-1 text-slate-400 hover:text-slate-600">
+                              <Star className="w-3.5 h-3.5" />
+                              <span>Make Featured</span>
+                            </span>
+                          )}
+                        </button>
                       </td>
 
                       {/* Actions */}

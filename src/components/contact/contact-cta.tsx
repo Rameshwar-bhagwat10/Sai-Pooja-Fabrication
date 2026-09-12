@@ -9,8 +9,13 @@ import { FadeUp } from "@/components/animations/fade-up";
 import { TextReveal } from "@/components/animations/text-reveal";
 import { COMPANY_INFO } from "@/data/company";
 
-export function ContactCta() {
-  const whatsappUrl = `https://wa.me/${COMPANY_INFO.whatsapp}?text=${encodeURIComponent(
+export interface ContactCtaProps {
+  company?: typeof COMPANY_INFO;
+}
+
+export function ContactCta({ company = COMPANY_INFO }: ContactCtaProps = {}) {
+  const activeCompany = company || COMPANY_INFO;
+  const whatsappUrl = `https://wa.me/${activeCompany.whatsapp}?text=${encodeURIComponent(
     "Hello Sai Pooja Fabrication, I would like to inquire about agricultural implements and fabrication services."
   )}`;
 
@@ -45,10 +50,10 @@ export function ContactCta() {
               </Button>
             </a>
 
-            <a href={`tel:${COMPANY_INFO.phone.replace(/[^0-9+]/g, "")}`}>
+            <a href={`tel:${activeCompany.phone.replace(/[^0-9+]/g, "")}`}>
               <Button variant="outline-light" size="lg">
                 <Phone className="w-4 h-4 mr-2 text-[#C8913D]" />
-                <span>CALL {COMPANY_INFO.phone}</span>
+                <span>CALL {activeCompany.phone}</span>
               </Button>
             </a>
           </FadeUp>

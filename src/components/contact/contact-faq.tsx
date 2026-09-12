@@ -4,10 +4,16 @@ import * as React from "react";
 import { ChevronDown } from "lucide-react";
 import { Container } from "@/components/ui/container";
 import { Section, SectionHeading } from "@/components/ui/section";
+import { type ContactFaqItem } from "@/types/contact";
 import { CONTACT_FAQS } from "@/data/contact";
 
-export function ContactFaq() {
-  const [openId, setOpenId] = React.useState<string | null>(CONTACT_FAQS[0]?.id || null);
+export interface ContactFaqProps {
+  faqs?: ContactFaqItem[];
+}
+
+export function ContactFaq({ faqs }: ContactFaqProps = {}) {
+  const faqsList = faqs && faqs.length > 0 ? faqs : CONTACT_FAQS;
+  const [openId, setOpenId] = React.useState<string | null>(faqsList[0]?.id || null);
 
   const toggleItem = (id: string) => {
     setOpenId((prev) => (prev === id ? null : id));
@@ -26,7 +32,7 @@ export function ContactFaq() {
 
         {/* Accordion List */}
         <div className="mt-12 flex flex-col gap-4">
-          {CONTACT_FAQS.map((faq) => {
+          {faqsList.map((faq) => {
             const isOpen = openId === faq.id;
             return (
               <div

@@ -1,0 +1,26 @@
+[
+  {
+    "number": "01",
+    "title": "PRACTICAL FIELD THINKING",
+    "description": "Every implement is engineered with insights from actual soil resistance, stubble handling, and tractor drawbar pulling dynamics.",
+    "tag": "FIELD TESTED"
+  },
+  {
+    "number": "02",
+    "title": "STRUCTURAL RESILIENCE",
+    "description": "We build exclusively with heavy ISMB channels, seamless box sections, and boron steel components to eliminate frame distortion.",
+    "tag": "HIGH-TENSILE STEEL"
+  },
+  {
+    "number": "03",
+    "title": "FABRICATION PRECISION",
+    "description": "Multi-pass MIG welding, CNC cut alignment, and stress-relieved joint geometry ensure longevity under heavy continuous draft.",
+    "tag": "MIG WELDED SEAMS"
+  },
+  {
+    "number": "04",
+    "title": "CUSTOM HORSEPOWER MATCHING",
+    "description": "We calibrate implement dimensions and frame weights specifically for 35 HP to 90+ HP tractor models with standard CAT-II 3-point hitches.",
+    "tag": "35-90+ HP TAILORED"
+  }
+]

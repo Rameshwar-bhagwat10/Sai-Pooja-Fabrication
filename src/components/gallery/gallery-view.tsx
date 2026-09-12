@@ -9,15 +9,21 @@ import { GalleryFilter } from "./gallery-filter";
 import { GalleryGrid } from "./gallery-grid";
 import { GalleryLightbox } from "./gallery-lightbox";
 
-export function GalleryView() {
+interface GalleryViewProps {
+  initialItems?: GalleryItem[];
+}
+
+export function GalleryView({ initialItems }: GalleryViewProps = {}) {
   const [activeCategory, setActiveCategory] = React.useState<GalleryCategory>("all");
   const [lightboxItem, setLightboxItem] = React.useState<GalleryItem | null>(null);
   const [isLightboxOpen, setIsLightboxOpen] = React.useState(false);
 
+  const baseItems = initialItems && initialItems.length > 0 ? initialItems : GALLERY_ITEMS;
+
   const filteredItems = React.useMemo(() => {
-    if (activeCategory === "all") return GALLERY_ITEMS;
-    return GALLERY_ITEMS.filter((item) => item.category === activeCategory);
-  }, [activeCategory]);
+    if (activeCategory === "all") return baseItems;
+    return baseItems.filter((item) => item.category === activeCategory);
+  }, [activeCategory, baseItems]);
 
   const handleOpenLightbox = (item: GalleryItem) => {
     setLightboxItem(item);
@@ -36,6 +42,7 @@ export function GalleryView() {
         <GalleryFilter
           activeCategory={activeCategory}
           onSelectCategory={setActiveCategory}
+          items={baseItems}
         />
 
         {/* Dynamic Image Grid */}

@@ -18,7 +18,19 @@ export const metadata = constructMetadata({
   keywords: seoKeywordMap.home.keywords,
 });
 
-export default function HomePage() {
+import { getAllProducts, getAllGalleryItems } from "@/lib/db";
+
+export const dynamic = "force-dynamic";
+
+export default async function HomePage() {
+  const [products, galleryItems] = await Promise.all([
+    getAllProducts(),
+    getAllGalleryItems(),
+  ]);
+
+  const featuredProducts = products.filter((p) => p.isFeatured);
+  const spotlightProduct = products.find((p) => p.slug === "heavy-duty-rotavator") || products[0];
+
   return (
     <>
       {/* Search Engine Structured Data */}
@@ -32,10 +44,10 @@ export default function HomePage() {
       <CompanyIntro />
 
       {/* 3. Product Categories — Forest 900 */}
-      <FeaturedProducts />
+      <FeaturedProducts products={featuredProducts.length > 0 ? featuredProducts : products} />
 
       {/* 4. Featured Product Spotlight — Dark / Image */}
-      <FeaturedProduct />
+      <FeaturedProduct product={spotlightProduct} />
 
       {/* 5. Why Sai Pooja — Warm White */}
       <WhyUs />
@@ -47,7 +59,7 @@ export default function HomePage() {
       <FieldShowcase />
 
       {/* 8. Gallery Preview — Soft White */}
-      <GalleryPreview />
+      <GalleryPreview items={galleryItems} />
 
       {/* 9. Final Conversion CTA — Forest 900 */}
       <FinalCta />

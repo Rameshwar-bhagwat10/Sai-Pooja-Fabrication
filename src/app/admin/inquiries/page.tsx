@@ -5,8 +5,8 @@ import { InquiriesManager } from "@/components/admin/inquiries-manager";
 
 export const dynamic = "force-dynamic";
 
-export default function AdminInquiriesPage() {
-  const inquiries = getAllInquiries();
+export default async function AdminInquiriesPage() {
+  const inquiries = await getAllInquiries();
 
   return (
     <div>

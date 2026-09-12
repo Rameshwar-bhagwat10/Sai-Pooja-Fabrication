@@ -4,7 +4,7 @@ import { isAuthenticated } from "@/lib/auth";
 
 export async function GET() {
   try {
-    const settings = getSiteSettings();
+    const settings = await getSiteSettings();
     return NextResponse.json({ success: true, settings });
   } catch (error) {
     console.error("Failed to fetch settings:", error);
@@ -20,7 +20,7 @@ export async function PUT(request: Request) {
     }
 
     const body = await request.json();
-    const updated = updateSiteSettings(body);
+    const updated = await updateSiteSettings(body);
     return NextResponse.json({ success: true, settings: updated });
   } catch (error) {
     console.error("Failed to update settings:", error);

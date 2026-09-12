@@ -9,7 +9,7 @@ export async function GET() {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }
 
-    const inquiries = getAllInquiries();
+    const inquiries = await getAllInquiries();
     return NextResponse.json({ success: true, inquiries });
   } catch (error) {
     console.error("Failed to fetch inquiries:", error);
@@ -32,7 +32,7 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Requirement description is required" }, { status: 400 });
     }
 
-    const saved = createInquiry({
+    const saved = await createInquiry({
       inquiryType: body.inquiryType || "general",
       selectedProduct: body.selectedProduct || "",
       name: body.name.trim(),
@@ -45,6 +45,6 @@ export async function POST(request: Request) {
     return NextResponse.json({ success: true, inquiry: saved }, { status: 201 });
   } catch (error) {
     console.error("Failed to save inquiry:", error);
-    return NextResponse.json({ error: "Failed to submit inquiry" }, { status: 500 });
+    return NextResponse.json({ error: (error as Error).message || "Failed to submit inquiry" }, { status: 500 });
   }
 }

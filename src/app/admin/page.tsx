@@ -4,11 +4,13 @@ import { AdminDashboardView } from "@/components/admin/admin-dashboard-view";
 
 export const dynamic = "force-dynamic";
 
-export default function AdminDashboardPage() {
-  const products = getAllProducts();
-  const inquiries = getAllInquiries();
-  const galleryItems = getAllGalleryItems();
-  const settings = getSiteSettings();
+export default async function AdminDashboardPage() {
+  const [products, inquiries, galleryItems, settings] = await Promise.all([
+    getAllProducts(),
+    getAllInquiries(),
+    getAllGalleryItems(),
+    getSiteSettings(),
+  ]);
 
   return (
     <AdminDashboardView

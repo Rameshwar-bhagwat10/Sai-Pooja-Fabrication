@@ -11,9 +11,14 @@ import { FadeUp } from "@/components/animations/fade-up";
 import { ImageReveal } from "@/components/animations/image-reveal";
 import { TextReveal } from "@/components/animations/text-reveal";
 import { ALL_PRODUCTS } from "@/data/products";
+import { type ProductItem } from "@/types/product";
 
-export function FeaturedProduct() {
-  const featured = ALL_PRODUCTS.find((p) => p.slug === "heavy-duty-rotavator") || ALL_PRODUCTS[0];
+interface FeaturedProductProps {
+  product?: ProductItem;
+}
+
+export function FeaturedProduct({ product }: FeaturedProductProps = {}) {
+  const featured = product || ALL_PRODUCTS.find((p) => p.slug === "heavy-duty-rotavator") || ALL_PRODUCTS[0];
 
   return (
     <Section surface="charcoal" spacing="cinematic" hasGridPattern isDarkSurface>

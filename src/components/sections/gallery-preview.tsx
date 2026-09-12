@@ -8,8 +8,15 @@ import { Button } from "@/components/ui/button";
 import { ImageWrapper } from "@/components/ui/image-wrapper";
 import { Stagger, StaggerItem } from "@/components/animations/stagger";
 import { SAMPLE_GALLERY_ITEMS } from "@/data/gallery";
+import { type GalleryItem } from "@/types/gallery";
 
-export function GalleryPreview() {
+interface GalleryPreviewProps {
+  items?: GalleryItem[];
+}
+
+export function GalleryPreview({ items }: GalleryPreviewProps = {}) {
+  const displayedItems = items && items.length >= 4 ? items : SAMPLE_GALLERY_ITEMS;
+
   return (
     <Section surface="soft-white" spacing="default">
       <Container size="default">
@@ -35,48 +42,48 @@ export function GalleryPreview() {
           {/* Item 1: Wide Aspect (7 cols) */}
           <StaggerItem className="md:col-span-7">
             <ImageWrapper
-              src={SAMPLE_GALLERY_ITEMS[0]?.image || "/images/workshop/steel-fabrication.svg"}
-              alt={SAMPLE_GALLERY_ITEMS[0]?.title || "Precision Welding"}
+              src={displayedItems[0]?.image || "/images/workshop/steel-fabrication.svg"}
+              alt={displayedItems[0]?.title || "Precision Welding"}
               aspectRatio="16/9"
               overlay="gradient-bottom"
               technicalLabel="ASSEMBLY // 01"
-              caption={SAMPLE_GALLERY_ITEMS[0]?.title}
+              caption={displayedItems[0]?.title}
             />
           </StaggerItem>
 
           {/* Item 2: Standard Aspect (5 cols) */}
           <StaggerItem className="md:col-span-5">
             <ImageWrapper
-              src={SAMPLE_GALLERY_ITEMS[1]?.image || "/images/products/plough/plough-main.svg"}
-              alt={SAMPLE_GALLERY_ITEMS[1]?.title || "Frame Welding"}
+              src={displayedItems[1]?.image || "/images/products/plough/plough-main.svg"}
+              alt={displayedItems[1]?.title || "Frame Welding"}
               aspectRatio="4/3"
               overlay="gradient-bottom"
               technicalLabel="WELDING // 02"
-              caption={SAMPLE_GALLERY_ITEMS[1]?.title}
+              caption={displayedItems[1]?.title}
             />
           </StaggerItem>
 
           {/* Item 3: Standard Aspect (5 cols) */}
           <StaggerItem className="md:col-span-5">
             <ImageWrapper
-              src={SAMPLE_GALLERY_ITEMS[2]?.image || "/images/products/rotavator/rotavator-main.svg"}
-              alt={SAMPLE_GALLERY_ITEMS[2]?.title || "Seed Drill Metering"}
+              src={displayedItems[2]?.image || "/images/products/rotavator/rotavator-main.svg"}
+              alt={displayedItems[2]?.title || "Seed Drill Metering"}
               aspectRatio="4/3"
               overlay="gradient-bottom"
               technicalLabel="CALIBRATION // 03"
-              caption={SAMPLE_GALLERY_ITEMS[2]?.title}
+              caption={displayedItems[2]?.title}
             />
           </StaggerItem>
 
           {/* Item 4: Wide Aspect (7 cols) */}
           <StaggerItem className="md:col-span-7">
             <ImageWrapper
-              src={SAMPLE_GALLERY_ITEMS[3]?.image || "/images/products/farm-trailer/farm-trailer-main.svg"}
-              alt={SAMPLE_GALLERY_ITEMS[3]?.title || "Trailer Chassis"}
+              src={displayedItems[3]?.image || "/images/products/farm-trailer/farm-trailer-main.svg"}
+              alt={displayedItems[3]?.title || "Trailer Chassis"}
               aspectRatio="16/9"
               overlay="gradient-bottom"
               technicalLabel="FINISHING // 04"
-              caption={SAMPLE_GALLERY_ITEMS[3]?.title}
+              caption={displayedItems[3]?.title}
             />
           </StaggerItem>
         </Stagger>

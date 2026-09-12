@@ -1,17 +1,20 @@
 import * as React from "react";
 import { Navbar } from "@/components/layout/navbar";
 import { Footer } from "@/components/layout/footer";
+import { getSiteSettings } from "@/lib/db";
 
-export default function MarketingLayout({
+export default async function MarketingLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const settings = await getSiteSettings();
+
   return (
     <div className="min-h-screen flex flex-col bg-[#FAFAF7] text-[#151A17] selection:bg-[#C8913D]/25 selection:text-[#10271D]">
       <Navbar />
       <main className="flex-1 w-full">{children}</main>
-      <Footer />
+      <Footer company={settings.company} />
     </div>
   );
 }

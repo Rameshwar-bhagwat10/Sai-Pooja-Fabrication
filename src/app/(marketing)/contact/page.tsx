@@ -9,6 +9,10 @@ import { ContactLocation } from "@/components/contact/contact-location";
 import { ContactFaq } from "@/components/contact/contact-faq";
 import { ContactCta } from "@/components/contact/contact-cta";
 
+import { getSiteSettings, getAllProducts } from "@/lib/db";
+
+export const dynamic = "force-dynamic";
+
 export const metadata = constructMetadata({
   title: seoKeywordMap.contact.title,
   description: seoKeywordMap.contact.description,
@@ -16,7 +20,12 @@ export const metadata = constructMetadata({
   keywords: seoKeywordMap.contact.keywords,
 });
 
-export default function ContactPage() {
+export default async function ContactPage() {
+  const [settings, products] = await Promise.all([
+    getSiteSettings(),
+    getAllProducts(),
+  ]);
+
   const breadcrumbItems = [
     { name: "Home", url: "/" },
     { name: "Contact & Factory Inquiries", url: "/contact" },
@@ -30,7 +39,7 @@ export default function ContactPage() {
       <ContactHero />
 
       {/* 2. Direct Contact Channels */}
-      <ContactMethods />
+      <ContactMethods company={settings.company} />
 
       {/* 3. Interactive Query-Aware Inquiry Form (wrapped in Suspense for useSearchParams) */}
       <React.Suspense
@@ -40,17 +49,17 @@ export default function ContactPage() {
           </div>
         }
       >
-        <InquirySection />
+        <InquirySection products={products} company={settings.company} />
       </React.Suspense>
 
       {/* 4. Plant Location & Visitor Desk */}
-      <ContactLocation />
+      <ContactLocation company={settings.company} />
 
       {/* 5. Frequently Asked Questions (Accordion) */}
-      <ContactFaq />
+      <ContactFaq faqs={settings.faqs} />
 
       {/* 6. Final Contact CTA */}
-      <ContactCta />
+      <ContactCta company={settings.company} />
     </>
   );
 }

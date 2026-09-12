@@ -15,7 +15,7 @@ export async function PATCH(request: Request, { params }: RouteProps) {
 
     const { id } = await params;
     const body = await request.json();
-    const updated = updateInquiry(id, {
+    const updated = await updateInquiry(id, {
       status: body.status,
       notes: body.notes,
     });
@@ -39,7 +39,7 @@ export async function DELETE(request: Request, { params }: RouteProps) {
     }
 
     const { id } = await params;
-    const deleted = deleteInquiry(id);
+    const deleted = await deleteInquiry(id);
     if (!deleted) {
       return NextResponse.json({ error: "Inquiry not found" }, { status: 404 });
     }

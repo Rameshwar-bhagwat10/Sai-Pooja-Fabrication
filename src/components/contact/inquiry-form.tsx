@@ -5,11 +5,14 @@ import { type InquiryFormData, type InquiryFormErrors, type InquiryType } from "
 import { ALL_PRODUCTS } from "@/data/products";
 import { Button } from "@/components/ui/button";
 
+import { type ProductItem } from "@/types/product";
+
 export interface InquiryFormProps {
   inquiryType: InquiryType;
   formData: InquiryFormData;
   errors: InquiryFormErrors;
   isSubmitting?: boolean;
+  products?: ProductItem[];
   onChange: (field: keyof InquiryFormData, value: string) => void;
   onSubmit: (e: React.FormEvent) => void;
 }
@@ -19,6 +22,7 @@ export function InquiryForm({
   formData,
   errors,
   isSubmitting = false,
+  products = ALL_PRODUCTS,
   onChange,
   onSubmit,
 }: InquiryFormProps) {
@@ -45,7 +49,7 @@ export function InquiryForm({
               <option value="" className="bg-[#151A17] text-[#D8D9D3]">
                 -- Select an Implement --
               </option>
-              {ALL_PRODUCTS.map((prod) => (
+              {products.map((prod) => (
                 <option key={prod.id} value={prod.name} className="bg-[#151A17] text-[#F4F1E8]">
                   {prod.name} ({prod.categoryGroup})
                 </option>

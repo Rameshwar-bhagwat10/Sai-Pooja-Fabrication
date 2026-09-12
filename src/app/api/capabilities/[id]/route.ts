@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { saveGalleryItem, deleteGalleryItem } from "@/lib/db";
+import { saveCapability, deleteCapability } from "@/lib/db";
 import { isAuthenticated } from "@/lib/auth";
 
 interface RouteProps {
@@ -15,11 +15,11 @@ export async function PUT(request: Request, { params }: RouteProps) {
 
     const { id } = await params;
     const body = await request.json();
-    const updated = await saveGalleryItem({ ...body, id });
-    return NextResponse.json({ success: true, item: updated });
+    const saved = await saveCapability({ ...body, id });
+    return NextResponse.json({ success: true, capability: saved });
   } catch (error) {
-    console.error("Failed to update gallery item:", error);
-    return NextResponse.json({ error: "Failed to update gallery item" }, { status: 500 });
+    console.error("Failed to update capability:", error);
+    return NextResponse.json({ error: "Failed to update capability" }, { status: 500 });
   }
 }
 
@@ -31,14 +31,14 @@ export async function DELETE(request: Request, { params }: RouteProps) {
     }
 
     const { id } = await params;
-    const deleted = await deleteGalleryItem(id);
+    const deleted = await deleteCapability(id);
     if (!deleted) {
-      return NextResponse.json({ error: "Gallery item not found" }, { status: 404 });
+      return NextResponse.json({ error: "Capability not found" }, { status: 404 });
     }
 
-    return NextResponse.json({ success: true, message: "Gallery item deleted" });
+    return NextResponse.json({ success: true, message: "Capability deleted" });
   } catch (error) {
-    console.error("Failed to delete gallery item:", error);
-    return NextResponse.json({ error: "Failed to delete gallery item" }, { status: 500 });
+    console.error("Failed to delete capability:", error);
+    return NextResponse.json({ error: "Failed to delete capability" }, { status: 500 });
   }
 }

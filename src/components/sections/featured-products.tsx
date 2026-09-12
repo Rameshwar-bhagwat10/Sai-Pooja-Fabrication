@@ -8,9 +8,14 @@ import { ProductCard } from "@/components/products/product-card";
 import { Button } from "@/components/ui/button";
 import { Stagger, StaggerItem } from "@/components/animations/stagger";
 import { getFeaturedProducts } from "@/data/products";
+import { type ProductItem } from "@/types/product";
 
-export function FeaturedProducts() {
-  const featuredProducts = getFeaturedProducts();
+interface FeaturedProductsProps {
+  products?: ProductItem[];
+}
+
+export function FeaturedProducts({ products }: FeaturedProductsProps = {}) {
+  const displayedProducts = products && products.length > 0 ? products : getFeaturedProducts();
 
   return (
     <Section surface="forest-900" spacing="default" hasGridPattern isDarkSurface>
@@ -35,7 +40,7 @@ export function FeaturedProducts() {
 
         {/* Staggered Product Cards Grid */}
         <Stagger className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {featuredProducts.slice(0, 4).map((product) => (
+          {displayedProducts.slice(0, 4).map((product) => (
             <StaggerItem key={product.id}>
               <ProductCard {...product} />
             </StaggerItem>

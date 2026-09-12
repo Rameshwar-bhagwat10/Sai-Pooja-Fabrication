@@ -5,8 +5,8 @@ import { ProductsManager } from "@/components/admin/products-manager";
 
 export const dynamic = "force-dynamic";
 
-export default function AdminProductsPage() {
-  const products = getAllProducts();
+export default async function AdminProductsPage() {
+  const products = await getAllProducts();
 
   return (
     <div>

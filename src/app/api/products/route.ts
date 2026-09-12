@@ -4,7 +4,7 @@ import { isAuthenticated } from "@/lib/auth";
 
 export async function GET() {
   try {
-    const products = getAllProducts();
+    const products = await getAllProducts();
     return NextResponse.json({ success: true, products });
   } catch (error) {
     console.error("Failed to fetch products:", error);
@@ -24,7 +24,7 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Product name is required" }, { status: 400 });
     }
 
-    const saved = saveProduct(body);
+    const saved = await saveProduct(body);
     return NextResponse.json({ success: true, product: saved });
   } catch (error) {
     console.error("Failed to create product:", error);

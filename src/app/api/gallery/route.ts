@@ -4,7 +4,7 @@ import { isAuthenticated } from "@/lib/auth";
 
 export async function GET() {
   try {
-    const items = getAllGalleryItems();
+    const items = await getAllGalleryItems();
     return NextResponse.json({ success: true, items });
   } catch (error) {
     console.error("Failed to fetch gallery:", error);
@@ -24,7 +24,7 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Title and Image URL are required" }, { status: 400 });
     }
 
-    const saved = saveGalleryItem(body);
+    const saved = await saveGalleryItem(body);
     return NextResponse.json({ success: true, item: saved });
   } catch (error) {
     console.error("Failed to create gallery item:", error);

@@ -17,9 +17,6 @@
       "/images/workshop/steel-fabrication.svg",
       "/images/workshop/field-operations.svg"
     ],
-    "suitableForTractorHp": "45-75 HP",
-    "warranty": "1 Year Structural Warranty",
-    "imageRole": "representative",
     "specifications": [
       {
         "label": "Main Frame",
@@ -48,23 +45,23 @@
     ],
     "features": [
       {
-        "number": "01",
         "title": "HIGH-TENSILE BORON STEEL POINTS",
+        "number": "01",
         "description": "Hardened wear points with exceptional abrasion resistance for extended service life in rocky soil."
       },
       {
-        "number": "02",
         "title": "DUAL-ACTING HYDRAULIC TURNOVER",
+        "number": "02",
         "description": "Enables instant 180-degree reversal directly from the tractor cabin without manual hitching effort."
       },
       {
-        "number": "03",
         "title": "REINFORCED DRAWBAR & MAST",
+        "number": "03",
         "description": "Heavy gusseted CAT-II hitch geometry distributes tractor drawbar load evenly to eliminate frame twist."
       },
       {
-        "number": "04",
         "title": "SMOOTH SOIL INVERSION",
+        "number": "04",
         "description": "Curved mouldboard profile buries weeds and crop residue deep beneath the seedbed layer."
       }
     ],
@@ -82,12 +79,15 @@
         "description": "Deep soil opening for monsoon rainwater penetration and subsoil absorption."
       }
     ],
+    "suitableForTractorHp": "45-75 HP",
     "relatedProductSlugs": [
       "rigid-tine-cultivator",
       "heavy-duty-rotavator",
       "heavy-disc-harrow"
     ],
+    "warranty": "1 Year Structural Warranty",
     "isFeatured": true,
+    "imageRole": "representative",
     "order": 1
   },
   {
@@ -108,9 +108,6 @@
       "/images/workshop/steel-fabrication.svg",
       "/images/workshop/field-operations.svg"
     ],
-    "suitableForTractorHp": "35-55 HP",
-    "warranty": "1 Year Structural Warranty",
-    "imageRole": "representative",
     "specifications": [
       {
         "label": "Main Frame",
@@ -139,23 +136,23 @@
     ],
     "features": [
       {
-        "number": "01",
         "title": "FORGED REVERSIBLE SHOVELS",
+        "number": "01",
         "description": "Double-pointed reversible design doubles operational wear life before shovel replacement."
       },
       {
-        "number": "02",
         "title": "ADJUSTABLE TINE SPACING",
+        "number": "02",
         "description": "Heavy-duty clamp mechanism allows flexible tine repositioning to match diverse inter-row crops."
       },
       {
-        "number": "03",
         "title": "RIGID HEAVY ISMB CHASSIS",
+        "number": "03",
         "description": "Solid welded steel crossbars eliminate deflection under heavy tractor drawbar pull."
       },
       {
-        "number": "04",
         "title": "UNIFORM SEEDBED FINISHING",
+        "number": "04",
         "description": "Staggered row layout ensures trash clearance without soil buildup between tines."
       }
     ],
@@ -173,12 +170,15 @@
         "description": "Loosening compacted tractor tire tracks to restore soil porosity."
       }
     ],
+    "suitableForTractorHp": "35-55 HP",
     "relatedProductSlugs": [
       "heavy-duty-hydraulic-reversible-plough",
       "tractor-mounted-tiller",
       "heavy-duty-rotavator"
     ],
+    "warranty": "1 Year Structural Warranty",
     "isFeatured": true,
+    "imageRole": "representative",
     "order": 2
   },
   {
@@ -199,8 +199,6 @@
       "/images/workshop/steel-fabrication.svg",
       "/images/workshop/field-operations.svg"
     ],
-    "suitableForTractorHp": "40-65 HP",
-    "warranty": "1 Year Gearbox & Frame Warranty",
     "specifications": [
       {
         "label": "Transmission",
@@ -229,23 +227,23 @@
     ],
     "features": [
       {
-        "number": "01",
         "title": "MULTI-SPEED GEAR TRANSMISSION",
+        "number": "01",
         "description": "Allows flexible gear ratio selection to match tractor speed and soil hardness."
       },
       {
-        "number": "02",
         "title": "OIL-BATH SIDE GEAR DRIVE",
+        "number": "02",
         "description": "Eliminates chain wear and delivers smooth, low-maintenance power transmission."
       },
       {
-        "number": "03",
         "title": "BORON STEEL ROTOR BLADES",
+        "number": "03",
         "description": "Engineered curved profile cuts through tough crop residue and weeds without bogging down."
       },
       {
-        "number": "04",
         "title": "FLOATING ADJUSTABLE TAILGATE",
+        "number": "04",
         "description": "Retains soil for finer pulverization and creates a perfectly level surface for direct sowing."
       }
     ],
@@ -263,12 +261,15 @@
         "description": "Milling and incorporating heavy crop stubble directly into the topsoil."
       }
     ],
+    "suitableForTractorHp": "40-65 HP",
     "relatedProductSlugs": [
       "rigid-tine-cultivator",
       "heavy-duty-hydraulic-reversible-plough",
       "seed-cum-fertilizer-drill"
     ],
+    "warranty": "1 Year Gearbox & Frame Warranty",
     "isFeatured": true,
+    "imageRole": "representative",
     "order": 3
   },
   {
@@ -289,9 +290,6 @@
       "/images/workshop/steel-fabrication.svg",
       "/images/workshop/field-operations.svg"
     ],
-    "suitableForTractorHp": "35-50 HP",
-    "warranty": "1 Year Structural Warranty",
-    "imageRole": "representative",
     "specifications": [
       {
         "label": "Frame",
@@ -316,23 +314,23 @@
     ],
     "features": [
       {
-        "number": "01",
         "title": "DUAL SPRING SHOCK ABSORPTION",
+        "number": "01",
         "description": "Spring mechanism deflects under heavy stone impact and snaps back into working position automatically."
       },
       {
-        "number": "02",
         "title": "HEAT-TREATED SHANKS",
+        "number": "02",
         "description": "Resistant to bending fatigue and micro-fractures under continuous hard soil load."
       },
       {
-        "number": "03",
         "title": "EFFICIENT FUEL DRAFT",
+        "number": "03",
         "description": "Optimized tine angle reduces tractor drawbar pull resistance."
       },
       {
-        "number": "04",
         "title": "EASY POINT REPLACEMENT",
+        "number": "04",
         "description": "Standardized bolt-on reversible points for fast field maintenance."
       }
     ],
@@ -350,12 +348,15 @@
         "description": "Breaking crusty topsoil layers to promote root oxygen uptake."
       }
     ],
+    "suitableForTractorHp": "35-50 HP",
     "relatedProductSlugs": [
       "rigid-tine-cultivator",
       "heavy-duty-hydraulic-reversible-plough",
       "heavy-disc-harrow"
     ],
+    "warranty": "1 Year Structural Warranty",
     "isFeatured": false,
+    "imageRole": "representative",
     "order": 4
   },
   {
@@ -376,8 +377,6 @@
       "/images/workshop/steel-fabrication.svg",
       "/images/workshop/field-operations.svg"
     ],
-    "suitableForTractorHp": "45-75 HP",
-    "warranty": "1 Year Frame & Gang Warranty",
     "specifications": [
       {
         "label": "Frame",
@@ -402,23 +401,23 @@
     ],
     "features": [
       {
-        "number": "01",
         "title": "BORON STEEL NOTCHED DISCS",
+        "number": "01",
         "description": "Front notched discs aggressively slice through heavy corn, cotton, or sugarcane residue."
       },
       {
-        "number": "02",
         "title": "HEAVY SEALED BEARING HUBS",
+        "number": "02",
         "description": "Triple-lip seals prevent dust and water intrusion during field operations."
       },
       {
-        "number": "03",
         "title": "ADJUSTABLE GANG ANGLE",
+        "number": "03",
         "description": "Quick pin adjustment to tune cutting aggression and inversion intensity."
       },
       {
-        "number": "04",
         "title": "HIGH CLEARANCE DESIGN",
+        "number": "04",
         "description": "Prevents trash clogging between adjacent discs in high-biomass field conditions."
       }
     ],
@@ -436,12 +435,15 @@
         "description": "Thoroughly mixing cover crops into soil before the next planting cycle."
       }
     ],
+    "suitableForTractorHp": "45-75 HP",
     "relatedProductSlugs": [
       "heavy-duty-hydraulic-reversible-plough",
       "heavy-duty-rotavator",
       "rigid-tine-cultivator"
     ],
+    "warranty": "1 Year Frame & Gang Warranty",
     "isFeatured": false,
+    "imageRole": "representative",
     "order": 5
   },
   {
@@ -462,9 +464,6 @@
       "/images/workshop/steel-fabrication.svg",
       "/images/workshop/field-operations.svg"
     ],
-    "suitableForTractorHp": "35-50 HP",
-    "warranty": "1 Year Structural Warranty",
-    "imageRole": "representative",
     "specifications": [
       {
         "label": "Frame",
@@ -489,23 +488,23 @@
     ],
     "features": [
       {
-        "number": "01",
         "title": "ADJUSTABLE MOULDBOARD WINGS",
+        "number": "01",
         "description": "Wings expand or contract to adjust furrow depth and ridge shoulder width."
       },
       {
-        "number": "02",
         "title": "REVERSIBLE POINT SHOVELS",
+        "number": "02",
         "description": "Hardened steel center points penetrate soil cleanly before the wings shape the ridge."
       },
       {
-        "number": "03",
         "title": "SLIDING TOOLBAR CLAMPS",
+        "number": "03",
         "description": "Fast row spacing adjustment to match diverse crop row requirements."
       },
       {
-        "number": "04",
         "title": "UNIFORM IRRIGATION CHANNELS",
+        "number": "04",
         "description": "Creates clean, obstruction-free channels for smooth gravity flood irrigation."
       }
     ],
@@ -523,12 +522,15 @@
         "description": "Piling soil around standing crop roots to support plant stability."
       }
     ],
+    "suitableForTractorHp": "35-50 HP",
     "relatedProductSlugs": [
       "rigid-tine-cultivator",
       "heavy-duty-land-leveler",
       "seed-cum-fertilizer-drill"
     ],
+    "warranty": "1 Year Structural Warranty",
     "isFeatured": false,
+    "imageRole": "representative",
     "order": 6
   },
   {
@@ -549,9 +551,6 @@
       "/images/workshop/steel-fabrication.svg",
       "/images/workshop/field-operations.svg"
     ],
-    "suitableForTractorHp": "35-65 HP",
-    "warranty": "1 Year Structural Warranty",
-    "imageRole": "representative",
     "specifications": [
       {
         "label": "Mouldboard Width",
@@ -576,23 +575,23 @@
     ],
     "features": [
       {
-        "number": "01",
         "title": "HEAVY-GAUGE CURVED BLADE",
+        "number": "01",
         "description": "Optimized curvature rolls soil forward smoothly without causing tractor engine stalling."
       },
       {
-        "number": "02",
         "title": "REVERSIBLE HIGH-CARBON CUTTING BLADE",
+        "number": "02",
         "description": "Bolt-on cutting edge can be flipped when one side wears down."
       },
       {
-        "number": "03",
         "title": "GUSSETED REINFORCING RIBS",
+        "number": "03",
         "description": "Rear structural ribs prevent blade bowing during heavy dirt scraping."
       },
       {
-        "number": "04",
         "title": "PRECISION FIELD SMOOTHING",
+        "number": "04",
         "description": "Eliminates high spots and fills depressions to achieve uniform irrigation water spread."
       }
     ],
@@ -610,12 +609,15 @@
         "description": "Clearing mounds, scraping surface debris, and smoothing virgin plots."
       }
     ],
+    "suitableForTractorHp": "35-65 HP",
     "relatedProductSlugs": [
       "adjustable-ridger",
       "hydraulic-tipping-farm-trailer",
       "rigid-tine-cultivator"
     ],
+    "warranty": "1 Year Structural Warranty",
     "isFeatured": false,
+    "imageRole": "representative",
     "order": 7
   },
   {
@@ -636,8 +638,6 @@
       "/images/workshop/steel-fabrication.svg",
       "/images/workshop/field-operations.svg"
     ],
-    "suitableForTractorHp": "35-55 HP",
-    "warranty": "1 Year Metering & Frame Warranty",
     "specifications": [
       {
         "label": "Number of Rows",
@@ -666,23 +666,23 @@
     ],
     "features": [
       {
-        "number": "01",
         "title": "DUAL COMPARTMENT HOPPER",
+        "number": "01",
         "description": "Independent seed and fertilizer boxes fabricated with corrosion-resistant primed sheet."
       },
       {
-        "number": "02",
         "title": "PRECISION FLUTED METERING",
+        "number": "02",
         "description": "Gentle on seeds with adjustable lever control for precise seed rate calibration per acre."
       },
       {
-        "number": "03",
         "title": "SIMULTANEOUS FERTILIZER BANDING",
+        "number": "03",
         "description": "Places fertilizer slightly beside and below the seed line to prevent seed burn."
       },
       {
-        "number": "04",
         "title": "GROUND-DRIVEN ACCURACY",
+        "number": "04",
         "description": "Seed rate adjusts proportionally to tractor speed to prevent overseeding or missed patches."
       }
     ],
@@ -700,12 +700,15 @@
         "description": "Applying basal DAP/NPK fertilizer directly into root zone during seeding."
       }
     ],
+    "suitableForTractorHp": "35-55 HP",
     "relatedProductSlugs": [
       "rigid-tine-cultivator",
       "heavy-duty-rotavator",
       "heavy-duty-land-leveler"
     ],
+    "warranty": "1 Year Metering & Frame Warranty",
     "isFeatured": true,
+    "imageRole": "representative",
     "order": 8
   },
   {
@@ -726,8 +729,6 @@
       "/images/workshop/steel-fabrication.svg",
       "/images/workshop/field-operations.svg"
     ],
-    "suitableForTractorHp": "40-75+ HP",
-    "warranty": "1 Year Chassis & Hydraulic Warranty",
     "specifications": [
       {
         "label": "Chassis",
@@ -756,23 +757,23 @@
     ],
     "features": [
       {
-        "number": "01",
         "title": "HEAVY ISMB CHASSIS RAILS",
+        "number": "01",
         "description": "High torsional stiffness prevents chassis sagging under extreme bulk grain or stone loads."
       },
       {
-        "number": "02",
         "title": "MULTI-STAGE TELESCOPIC CYLINDER",
+        "number": "02",
         "description": "Provides steep 50-degree tipping angle for clean discharge of sticky or wet manure and soil."
       },
       {
-        "number": "03",
         "title": "DROP-DOWN & DETACHABLE SIDES",
+        "number": "03",
         "description": "Side and rear gates open or detach easily for flatbed transport of bagged cargo and equipment."
       },
       {
-        "number": "04",
         "title": "SOLID STEEL AXLE HUB ASSEMBLY",
+        "number": "04",
         "description": "Engineered for uneven farm cart tracks and rutted rural roads."
       }
     ],
@@ -790,12 +791,15 @@
         "description": "Moving construction sand, soil, and aggregate across farm infrastructure projects."
       }
     ],
+    "suitableForTractorHp": "40-75+ HP",
     "relatedProductSlugs": [
       "heavy-duty-land-leveler",
       "heavy-duty-hydraulic-reversible-plough",
       "custom-fabricated-implements"
     ],
+    "warranty": "1 Year Chassis & Hydraulic Warranty",
     "isFeatured": true,
+    "imageRole": "representative",
     "order": 9
   },
   {
@@ -816,9 +820,6 @@
       "/images/workshop/steel-fabrication.svg",
       "/images/workshop/field-operations.svg"
     ],
-    "suitableForTractorHp": "Custom Tailored (30 - 90+ HP)",
-    "warranty": "1 Year Structural Warranty",
-    "imageRole": "representative",
     "specifications": [
       {
         "label": "Fabrication Standard",
@@ -843,23 +844,23 @@
     ],
     "features": [
       {
-        "number": "01",
         "title": "TAILORED TO REGIONAL CROPS",
+        "number": "01",
         "description": "Customized implements designed specifically for regional soil conditions and crop row geometry."
       },
       {
-        "number": "02",
         "title": "PRECISE TRACTOR HP MATCHING",
+        "number": "02",
         "description": "Dimensions and frame weight calibrated for maximum fuel efficiency on your tractor model."
       },
       {
-        "number": "03",
         "title": "HIGH-STRENGTH STEEL GRADES",
+        "number": "03",
         "description": "Fabricated with heavy ISMB channels, laser-cut plates, and boron wear components."
       },
       {
-        "number": "04",
         "title": "DIRECT WORKSHOP COLLABORATION",
+        "number": "04",
         "description": "Direct consultation with our fabrication craftsmen to refine dimensions and functionality."
       }
     ],
@@ -877,12 +878,15 @@
         "description": "Customizing mounting brackets and hitch points for non-standard tractor models."
       }
     ],
+    "suitableForTractorHp": "Custom Tailored (30 - 90+ HP)",
     "relatedProductSlugs": [
       "heavy-duty-hydraulic-reversible-plough",
       "hydraulic-tipping-farm-trailer",
       "heavy-duty-rotavator"
     ],
+    "warranty": "1 Year Structural Warranty",
     "isFeatured": false,
+    "imageRole": "representative",
     "order": 10
   }
 ]

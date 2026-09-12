@@ -7,7 +7,13 @@ import { Section, SectionHeading } from "@/components/ui/section";
 import { FadeUp } from "@/components/animations/fade-up";
 import { COMPANY_INFO } from "@/data/company";
 
-export function ContactLocation() {
+export interface ContactLocationProps {
+  company?: typeof COMPANY_INFO;
+}
+
+export function ContactLocation({ company = COMPANY_INFO }: ContactLocationProps = {}) {
+  const activeCompany = company || COMPANY_INFO;
+
   return (
     <Section surface="warm-white" spacing="default" id="workshop-location">
       <Container size="default">
@@ -31,11 +37,11 @@ export function ContactLocation() {
                   Plant Address
                 </h3>
                 <p className="text-small text-[#6E746F] leading-relaxed font-sans">
-                  {COMPANY_INFO.name}
+                  {activeCompany.name}
                   <br />
-                  {COMPANY_INFO.address.line1}
+                  {activeCompany.address.line1}
                   <br />
-                  {COMPANY_INFO.address.city}, {COMPANY_INFO.address.country}
+                  {activeCompany.address.city}, {activeCompany.address.country}
                 </p>
               </div>
 
@@ -56,7 +62,7 @@ export function ContactLocation() {
                   Working Hours
                 </h3>
                 <p className="text-small text-[#6E746F] leading-relaxed font-sans">
-                  {COMPANY_INFO.operatingHours}
+                  {activeCompany.operatingHours}
                   <br />
                   Sunday: Closed for maintenance
                 </p>
