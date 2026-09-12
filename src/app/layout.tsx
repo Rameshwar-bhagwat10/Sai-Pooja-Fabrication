@@ -34,6 +34,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
+      data-scroll-behavior="smooth"
       className={`${spaceGrotesk.variable} ${inter.variable} scroll-smooth antialiased`}
     >
       <body className="min-h-screen bg-[#FAFAF7] text-[#151A17] font-sans selection:bg-[#C8913D]/20 selection:text-[#10271D]">
