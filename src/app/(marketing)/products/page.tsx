@@ -1,11 +1,13 @@
 import * as React from "react";
 import { constructMetadata } from "@/lib/metadata";
 import { seoKeywordMap } from "@/config/seo";
-import { ALL_PRODUCTS } from "@/data/products";
+import { getAllProducts } from "@/lib/db";
 import { CollectionPageJsonLd } from "@/components/seo/structured-data";
 import { ProductsHero } from "@/components/products/products-hero";
 import { ProductsCatalogueView } from "@/components/products/products-catalogue-view";
 import { FinalCta } from "@/components/sections/final-cta";
+
+export const dynamic = "force-dynamic";
 
 export const metadata = constructMetadata({
   title: seoKeywordMap.products.title,
@@ -15,7 +17,8 @@ export const metadata = constructMetadata({
 });
 
 export default function ProductsPage() {
-  const collectionItems = ALL_PRODUCTS.map((prod) => ({
+  const products = getAllProducts();
+  const collectionItems = products.map((prod) => ({
     name: prod.name,
     url: `/products/${prod.slug}`,
   }));
@@ -34,7 +37,7 @@ export default function ProductsPage() {
 
       {/* 2. Interactive Category Filter & Animated Grid */}
       <React.Suspense fallback={<div className="min-h-[400px] bg-[#FAFAF7]" />}>
-        <ProductsCatalogueView initialProducts={ALL_PRODUCTS} />
+        <ProductsCatalogueView initialProducts={products} />
       </React.Suspense>
 
       {/* 3. Bottom Conversion CTA */}

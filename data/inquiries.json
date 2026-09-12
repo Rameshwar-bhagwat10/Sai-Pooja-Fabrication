@@ -1,0 +1,41 @@
+[
+  {
+    "id": "inq-demo-1",
+    "inquiryType": "product",
+    "selectedProduct": "Hydraulic Reversible Plough",
+    "name": "Ramesh Patil",
+    "phone": "+91 98220 12345",
+    "email": "ramesh.patil@example.com",
+    "requirement": "Need 2-bottom reversible plough for 55 HP Mahindra tractor. Quote required for delivery to Nashik.",
+    "status": "new",
+    "notes": "Farmer contacted through website, prefers WhatsApp call.",
+    "createdAt": "2026-09-09T02:48:54.954Z",
+    "updatedAt": "2026-09-09T02:48:54.954Z"
+  },
+  {
+    "id": "inq-demo-2",
+    "inquiryType": "custom-fabrication",
+    "selectedProduct": "",
+    "name": "Vikram Deshmukh",
+    "phone": "+91 94231 67890",
+    "email": "deshmukh.farms@example.com",
+    "requirement": "Custom sugarcane furrower with adjustable 4-ft and 5-ft row spacing for 75 HP tractor.",
+    "status": "contacted",
+    "notes": "Discussed toolbar dimensions over call. Sending CAD sketch.",
+    "createdAt": "2026-09-08T06:48:54.954Z",
+    "updatedAt": "2026-09-08T18:48:54.954Z"
+  },
+  {
+    "id": "inq-demo-3",
+    "inquiryType": "product",
+    "selectedProduct": "Heavy Duty Rigid Cultivator",
+    "name": "Sunil Shinde",
+    "phone": "+91 99750 54321",
+    "email": "",
+    "requirement": "9-tine rigid cultivator with heavy spring frame. Looking to purchase within 2 weeks.",
+    "status": "quotation_sent",
+    "notes": "Sent factory ex-works price quote via WhatsApp.",
+    "createdAt": "2026-09-07T06:48:54.954Z",
+    "updatedAt": "2026-09-08T06:48:54.954Z"
+  }
+]

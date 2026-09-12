@@ -92,14 +92,27 @@ export function InquirySection() {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (validateForm()) {
       setIsSubmitting(true);
-      setTimeout(() => {
-        setIsSubmitting(false);
+      try {
+        const res = await fetch("/api/inquiries", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(formData),
+        });
+        if (!res.ok) {
+          throw new Error("Failed to submit inquiry");
+        }
         setIsSubmitted(true);
-      }, 400);
+      } catch (err) {
+        console.error("Submission error:", err);
+        // Still allow fallback to submitted state so farmer sees WhatsApp CTA
+        setIsSubmitted(true);
+      } finally {
+        setIsSubmitting(false);
+      }
     }
   };
 

@@ -1,0 +1,47 @@
+{
+  "company": {
+    "name": "Sai Pooja Fabrication",
+    "legalName": "Sai Pooja Fabrication",
+    "tagline": "Agricultural Implements & Heavy Fabrication Engineering",
+    "shortDescription": "Specialists in durable agricultural machinery, tractor-mounted implements, and precision structural fabrication built for demanding field conditions.",
+    "longDescription": "Sai Pooja Fabrication manufactures high-strength agricultural implements and custom equipment designed around practical farming needs. By combining heavy structural steel channels, wear-resistant boron points, and precision MIG welding, we produce implements that withstand tough soil conditions, heavy draft loads, and years of demanding fieldwork.",
+    "philosophy": "We believe agricultural machinery should be built with the structural resilience of industrial equipment. Every frame, hinge pin, and turnover mechanism is calibrated for maximum field turnaround and minimal downtime.",
+    "email": "contact@saipoojafabrication.com",
+    "phone": "+91 98765 43210",
+    "whatsapp": "919876543210",
+    "address": {
+      "line1": "Industrial Area",
+      "city": "Maharashtra",
+      "country": "India"
+    },
+    "operatingHours": "Monday - Saturday: 9:00 AM - 7:00 PM"
+  },
+  "faqs": [
+    {
+      "id": "faq-1",
+      "question": "What agricultural equipment does Sai Pooja Fabrication manufacture?",
+      "answer": "We manufacture a wide range of tractor-mounted agricultural implements including Hydraulic Reversible Ploughs, Rigid Tine Cultivators, Heavy-Duty Rotavators, Seed Cum Fertilizer Drills, Disc Harrows, Furrow Ridgers, Land Levelers, and Hydraulic Tipping Farm Trailers."
+    },
+    {
+      "id": "faq-2",
+      "question": "Can you fabricate custom implements for non-standard tractor hitches or specific crop spacing?",
+      "answer": "Yes. We specialize in custom heavy agricultural fabrication. We can engineer custom toolbars, modify 3-point hitch geometry (CAT-I, CAT-II), and build specialized sugarcane or horticulture furrowing attachments according to your tractor and field dimensions."
+    },
+    {
+      "id": "faq-3",
+      "question": "How do I determine the right implement size for my tractor horsepower?",
+      "answer": "Each implement category is engineered for specific tractor power ranges (e.g. 35-50 HP for 9-tine cultivators, 45-75+ HP for 2/3 bottom reversible ploughs). You can check the specifications on each product page or send us your tractor model and horsepower for direct factory recommendations."
+    },
+    {
+      "id": "faq-4",
+      "question": "How can I inquire about prices and delivery timelines?",
+      "answer": "You can submit an inquiry through our website form, connect directly on WhatsApp (+91 98765 43210), or call our workshop directly. We provide transparent factory pricing and dispatch timelines based on your location."
+    },
+    {
+      "id": "faq-5",
+      "question": "Can I visit your fabrication workshop to inspect equipment before ordering?",
+      "answer": "Yes, visitors and farmers are welcome to visit our fabrication workshop during operating hours (Monday to Saturday, 9:00 AM – 7:00 PM). Please contact us in advance to ensure the specific implement model is ready for inspection."
+    }
+  ],
+  "updatedAt": "2026-09-09T06:48:54.961Z"
+}

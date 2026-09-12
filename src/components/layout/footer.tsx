@@ -1,3 +1,5 @@
+"use client";
+
 import * as React from "react";
 import Link from "next/link";
 import { ArrowUpRight, Phone, Mail, MapPin, MessageSquare } from "lucide-react";
@@ -131,6 +133,12 @@ export function Footer() {
           <div className="flex items-center gap-6">
             <span>PRECISION AGRICULTURAL FABRICATION</span>
             <span className="text-[#C8913D]">MADE IN INDIA</span>
+            <Link
+              href="/admin"
+              className="text-white/30 hover:text-[#C8913D] transition-colors"
+            >
+              Admin
+            </Link>
           </div>
         </div>
       </Container>

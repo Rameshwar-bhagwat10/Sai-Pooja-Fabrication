@@ -1,13 +1,30 @@
 import * as React from "react";
 import { type Metadata } from "next";
 import { notFound } from "next/navigation";
-import {
-  ALL_PRODUCTS,
-  getProductBySlug,
-  getRelatedProducts,
-  getAdjacentProducts,
-} from "@/data/products";
+import { getProductBySlug, getAllProducts } from "@/lib/db";
+import { type ProductItem } from "@/types/product";
 import { constructMetadata } from "@/lib/metadata";
+
+export const dynamic = "force-dynamic";
+
+function getDynamicRelatedProducts(product: ProductItem, allProducts: ProductItem[]): ProductItem[] {
+  const related = allProducts.filter(
+    (p) => product.relatedProductSlugs?.includes(p.slug) && p.slug !== product.slug
+  );
+  if (related.length >= 3) return related.slice(0, 3);
+  const fallback = allProducts.filter(
+    (p) => p.slug !== product.slug && !related.some((r) => r.slug === p.slug)
+  );
+  return [...related, ...fallback].slice(0, 3);
+}
+
+function getDynamicAdjacentProducts(currentSlug: string, allProducts: ProductItem[]) {
+  const index = allProducts.findIndex((p) => p.slug === currentSlug);
+  if (index === -1) return { prev: null, next: null };
+  const prev = index > 0 ? allProducts[index - 1] : allProducts[allProducts.length - 1];
+  const next = index < allProducts.length - 1 ? allProducts[index + 1] : allProducts[0];
+  return { prev, next };
+}
 import { ProductJsonLd, BreadcrumbsJsonLd } from "@/components/seo/structured-data";
 import { ProductHero } from "@/components/products/product-hero";
 import { ProductOverview } from "@/components/products/product-overview";
@@ -24,7 +41,8 @@ interface ProductPageProps {
 }
 
 export async function generateStaticParams() {
-  return ALL_PRODUCTS.map((product) => ({
+  const products = getAllProducts();
+  return products.map((product) => ({
     slug: product.slug,
   }));
 }
@@ -66,8 +84,9 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
     notFound();
   }
 
-  const relatedProducts = getRelatedProducts(product);
-  const { prev, next } = getAdjacentProducts(product.slug);
+  const allProducts = getAllProducts();
+  const relatedProducts = getDynamicRelatedProducts(product, allProducts);
+  const { prev, next } = getDynamicAdjacentProducts(product.slug, allProducts);
 
   const breadcrumbItems = [
     { name: "Home", url: "/" },
