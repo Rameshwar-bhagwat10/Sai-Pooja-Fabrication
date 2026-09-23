@@ -23,7 +23,10 @@ export function AdminLayoutClient({ children }: AdminLayoutClientProps) {
     let isMounted = true;
     async function checkAuth() {
       try {
-        const res = await fetch("/api/auth/me");
+        const res = await fetch("/api/auth/me", {
+          cache: "no-store",
+          credentials: "include",
+        });
         const data = await res.json();
         if (!data.authenticated) {
           router.push("/admin/login");
@@ -40,7 +43,10 @@ export function AdminLayoutClient({ children }: AdminLayoutClientProps) {
 
     async function fetchInquiriesCount() {
       try {
-        const res = await fetch("/api/inquiries");
+        const res = await fetch("/api/inquiries", {
+          cache: "no-store",
+          credentials: "include",
+        });
         const data = await res.json();
         if (data.success && Array.isArray(data.inquiries)) {
           const unread = data.inquiries.filter((inq: any) => inq.status === "new").length;

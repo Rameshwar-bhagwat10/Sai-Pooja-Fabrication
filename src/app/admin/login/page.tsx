@@ -7,10 +7,30 @@ import { Lock, ArrowRight, ShieldCheck, Eye, EyeOff, AlertCircle } from "lucide-
 
 export default function AdminLoginPage() {
   const router = useRouter();
+  const [email, setEmail] = React.useState("admin@saipoojafabrication.com");
   const [password, setPassword] = React.useState("");
   const [showPassword, setShowPassword] = React.useState(false);
   const [error, setError] = React.useState("");
   const [isSubmitting, setIsSubmitting] = React.useState(false);
+
+  // If already logged in, automatically navigate to /admin
+  React.useEffect(() => {
+    async function checkExistingAuth() {
+      try {
+        const res = await fetch("/api/auth/me", {
+          cache: "no-store",
+          credentials: "include",
+        });
+        const data = await res.json();
+        if (data.authenticated) {
+          router.replace("/admin");
+        }
+      } catch {
+        // Not authenticated, stay on login page
+      }
+    }
+    checkExistingAuth();
+  }, [router]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -26,12 +46,15 @@ export default function AdminLoginPage() {
       const res = await fetch("/api/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ password: password.trim() }),
+        body: JSON.stringify({
+          email: email.trim(),
+          password: password.trim(),
+        }),
       });
 
       const data = await res.json();
       if (!res.ok || !data.success) {
-        setError(data.error || "Invalid administrator password. Try 'saipooja2026'.");
+        setError(data.error || "Invalid administrator credentials. Try password 'saipooja2026'.");
         setIsSubmitting(false);
         return;
       }
@@ -60,8 +83,9 @@ export default function AdminLoginPage() {
         >
           ← Back to Website
         </Link>
-        <span className="text-[10px] font-mono uppercase tracking-widest text-amber-700 bg-amber-50 px-2.5 py-1 rounded-full border border-amber-200/80 font-bold">
-          Admin Gateway
+        <span className="text-[10px] font-mono uppercase tracking-widest text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-200/80 font-bold flex items-center gap-1">
+          <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+          Supabase & JWT
         </span>
       </div>
 
@@ -90,7 +114,25 @@ export default function AdminLoginPage() {
           )}
 
           {/* Form */}
-          <form onSubmit={handleSubmit} className="space-y-5">
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <div>
+              <label
+                htmlFor="admin-email"
+                className="block text-xs font-mono font-bold text-slate-700 uppercase tracking-wider mb-2"
+              >
+                Admin Email
+              </label>
+              <input
+                id="admin-email"
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="admin@saipoojafabrication.com"
+                required
+                className="w-full px-3.5 py-2.5 rounded-xl bg-slate-50 border border-slate-300 text-slate-900 placeholder-slate-400 text-sm focus:outline-none focus:border-amber-600 focus:bg-white focus:ring-2 focus:ring-amber-500/15 transition-all font-mono"
+              />
+            </div>
+
             <div>
               <label
                 htmlFor="admin-password"
@@ -110,7 +152,7 @@ export default function AdminLoginPage() {
                   placeholder="Enter administrator password..."
                   required
                   autoFocus
-                  className="w-full pl-10 pr-11 py-3 rounded-xl bg-slate-50 border border-slate-300 text-slate-900 placeholder-slate-400 text-sm focus:outline-none focus:border-amber-600 focus:bg-white focus:ring-2 focus:ring-amber-500/15 transition-all font-mono"
+                  className="w-full pl-10 pr-11 py-2.5 rounded-xl bg-slate-50 border border-slate-300 text-slate-900 placeholder-slate-400 text-sm focus:outline-none focus:border-amber-600 focus:bg-white focus:ring-2 focus:ring-amber-500/15 transition-all font-mono"
                 />
                 <button
                   type="button"
@@ -125,12 +167,12 @@ export default function AdminLoginPage() {
             <button
               type="submit"
               disabled={isSubmitting}
-              className="w-full py-3.5 px-4 rounded-xl bg-amber-600 hover:bg-amber-700 active:scale-[0.99] text-white font-bold text-sm uppercase tracking-wider font-mono flex items-center justify-center gap-2 shadow-md shadow-amber-600/20 transition-all disabled:opacity-50 cursor-pointer"
+              className="w-full py-3.5 px-4 mt-2 rounded-xl bg-amber-600 hover:bg-amber-700 active:scale-[0.99] text-white font-bold text-sm uppercase tracking-wider font-mono flex items-center justify-center gap-2 shadow-md shadow-amber-600/20 transition-all disabled:opacity-50 cursor-pointer"
             >
               {isSubmitting ? (
                 <>
                   <div className="w-4 h-4 rounded-full border-2 border-white border-t-transparent animate-spin" />
-                  <span>Authenticating...</span>
+                  <span>Authenticating via Supabase...</span>
                 </>
               ) : (
                 <>
@@ -147,7 +189,7 @@ export default function AdminLoginPage() {
               <ShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
               <span>Default Key: <code className="text-amber-800 bg-amber-50 px-1.5 py-0.5 rounded font-bold">saipooja2026</code></span>
             </div>
-            <span className="text-slate-400">Secure Access</span>
+            <span className="text-slate-400">Supabase Auth</span>
           </div>
         </div>
       </div>

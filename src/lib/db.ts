@@ -49,10 +49,31 @@ export interface StoredSettings {
 
 let pool: pg.Pool | null = null;
 
-function getPool(): pg.Pool | null {
+export function normalizeDatabaseUrl(rawUrl: string): string {
+  // Translate direct Supabase hostname to IPv4 pooler if necessary
+  if (rawUrl.includes("db.ihaxijlnumozvghgvcqf.supabase.co")) {
+    return rawUrl
+      .replace(
+        "postgres:saipoojafabricati9ns@db.ihaxijlnumozvghgvcqf.supabase.co:5432",
+        "postgres.ihaxijlnumozvghgvcqf:saipoojafabricati9ns@aws-0-ap-northeast-1.pooler.supabase.com:5432"
+      )
+      .replace(
+        "@db.ihaxijlnumozvghgvcqf.supabase.co:5432",
+        "@aws-0-ap-northeast-1.pooler.supabase.com:5432"
+      );
+  }
+  return rawUrl;
+}
+
+export function getPool(): pg.Pool | null {
   if (typeof window !== "undefined") return null;
-  const dbUrl = process.env.DATABASE_URL;
-  if (!dbUrl) return null;
+  const rawUrl =
+    process.env.DATABASE_URL ||
+    process.env["DATABASE URL"] ||
+    process.env.DIRECT_URL;
+  if (!rawUrl) return null;
+
+  const dbUrl = normalizeDatabaseUrl(rawUrl);
 
   if (!pool) {
     pool = new Pool({
