@@ -91,6 +91,51 @@
     "order": 1
   },
   {
+    "id": "prod-1790146446988",
+    "slug": "bcd",
+    "name": "bcd",
+    "category": "plough",
+    "categoryGroup": "tillage",
+    "categoryName": "Hydraulic Reversible Plough",
+    "tagline": "",
+    "description": "",
+    "fullDescription": "",
+    "heroImage": "/images/products/custom-implements/custom-implements-main.svg",
+    "thumbnail": "/images/products/custom-implements/custom-implements-main.svg",
+    "galleryImages": [
+      "/images/products/custom-implements/custom-implements-main.svg"
+    ],
+    "specifications": [
+      {
+        "label": "Main Frame",
+        "value": "Heavy Seamless Box Section (100x100x8 mm)"
+      },
+      {
+        "label": "Linkage Standard",
+        "value": "CAT-II Three-Point Linkage"
+      }
+    ],
+    "features": [
+      {
+        "title": "HIGH-TENSILE BORON STEEL POINTS",
+        "number": "01",
+        "description": "Hardened wear points with abrasion resistance for extended service life."
+      }
+    ],
+    "applications": [
+      {
+        "title": "Primary Deep Tillage",
+        "description": "Breaking up hardpan layers and virgin soil to maximize root aeration."
+      }
+    ],
+    "suitableForTractorHp": "45-75 HP",
+    "relatedProductSlugs": [],
+    "warranty": "1 Year Structural Warranty",
+    "isFeatured": true,
+    "imageRole": "representative",
+    "order": 1
+  },
+  {
     "id": "prod-1789541194703",
     "slug": "abc",
     "name": "abc",

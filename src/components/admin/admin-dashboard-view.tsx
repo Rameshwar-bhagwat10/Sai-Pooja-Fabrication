@@ -295,6 +295,22 @@ export function AdminDashboardView({
                 </Link>
 
                 <Link
+                  href="/admin/feedback"
+                  className="p-4 rounded-xl bg-white border border-slate-200 shadow-xs flex items-center justify-between text-slate-900 hover:border-amber-500/80 hover:bg-amber-50/30 transition-all group"
+                >
+                  <div className="flex items-center gap-3">
+                    <div className="w-8 h-8 rounded-lg bg-amber-100 text-amber-800 border border-amber-200 flex items-center justify-center font-bold">
+                      ★
+                    </div>
+                    <div>
+                      <div className="text-sm font-bold font-mono">MODERATE FARMER REVIEWS</div>
+                      <div className="text-xs text-slate-500">Approve reviews & reply to farmers</div>
+                    </div>
+                  </div>
+                  <span className="text-slate-400 group-hover:translate-x-1 transition-transform">→</span>
+                </Link>
+
+                <Link
                   href="/admin/settings"
                   className="p-4 rounded-xl bg-white border border-slate-200 shadow-xs flex items-center justify-between text-slate-900 hover:border-emerald-500/80 hover:bg-emerald-50/30 transition-all group"
                 >

@@ -65,6 +65,16 @@ declare module "lucide-react" {
   export const PenTool: LucideIcon;
   export const CheckCheck: LucideIcon;
   export const Info: LucideIcon;
+  export const MessageSquareQuote: LucideIcon;
+  export const MessageSquarePlus: LucideIcon;
+  export const MessageCircle: LucideIcon;
+  export const ThumbsUp: LucideIcon;
+  export const XCircle: LucideIcon;
+  export const CornerDownRight: LucideIcon;
+  export const Send: LucideIcon;
+  export const User: LucideIcon;
+  export const Gauge: LucideIcon;
+  export const Share2: LucideIcon;
 
   const icons: { [key: string]: LucideIcon };
   export default icons;

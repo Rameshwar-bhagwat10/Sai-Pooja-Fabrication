@@ -11,6 +11,7 @@ import { ALL_PRODUCTS } from "@/data/products";
 import { GALLERY_ITEMS } from "@/data/gallery";
 import { COMPANY_INFO } from "@/data/company";
 import { CONTACT_FAQS } from "@/data/contact";
+import { type StoredFeedback, type CreateFeedbackInput, type FeedbackStatus, type FeedbackStats } from "@/types/feedback";
 
 const { Pool } = pg;
 
@@ -23,6 +24,7 @@ const SETTINGS_FILE = path.join(DATA_DIR, "settings.json");
 const CAPABILITIES_FILE = path.join(DATA_DIR, "capabilities.json");
 const PROCESS_FILE = path.join(DATA_DIR, "fabrication-process.json");
 const APPROACH_FILE = path.join(DATA_DIR, "company-approach.json");
+const FEEDBACKS_FILE = path.join(DATA_DIR, "feedbacks.json");
 
 export type InquiryStatus =
   | "new"
@@ -165,6 +167,33 @@ function rowToInquiry(row: any): StoredInquiry {
     additionalDetails: row.additional_details || "",
     status: row.status as InquiryStatus,
     notes: row.notes || "",
+    createdAt: row.created_at ? new Date(row.created_at).toISOString() : new Date().toISOString(),
+    updatedAt: row.updated_at ? new Date(row.updated_at).toISOString() : new Date().toISOString(),
+  };
+}
+
+function rowToFeedback(row: any): StoredFeedback {
+  return {
+    id: row.id,
+    productSlug: row.product_slug,
+    productName: row.product_name,
+    customerName: row.customer_name,
+    customerLocation: row.customer_location,
+    customerPhone: row.customer_phone || undefined,
+    tractorModel: row.tractor_model || undefined,
+    soilType: row.soil_type || undefined,
+    usageDuration: row.usage_duration || undefined,
+    rating: Number(row.rating) || 5,
+    durabilityRating: row.durability_rating ? Number(row.durability_rating) : undefined,
+    performanceRating: row.performance_rating ? Number(row.performance_rating) : undefined,
+    serviceRating: row.service_rating ? Number(row.service_rating) : undefined,
+    headline: row.headline || "",
+    comment: row.comment || "",
+    tags: typeof row.tags === "string" ? JSON.parse(row.tags) : (Array.isArray(row.tags) ? row.tags : []),
+    isVerifiedFarmer: Boolean(row.is_verified_farmer),
+    status: (row.status as FeedbackStatus) || "approved",
+    isFeatured: Boolean(row.is_featured),
+    adminReply: row.admin_reply || undefined,
     createdAt: row.created_at ? new Date(row.created_at).toISOString() : new Date().toISOString(),
     updatedAt: row.updated_at ? new Date(row.updated_at).toISOString() : new Date().toISOString(),
   };
@@ -1012,4 +1041,263 @@ export async function saveFabricationStep(data: FabricationProcessStep): Promise
   }
   writeJsonFile(PROCESS_FILE, steps);
   return data;
+}
+
+// ---------------- FEEDBACKS & REVIEWS ----------------
+
+export async function getAllFeedbacks(options?: {
+  productSlug?: string;
+  status?: FeedbackStatus | "all";
+}): Promise<StoredFeedback[]> {
+  const clientPool = getPool();
+  if (clientPool) {
+    try {
+      let query = "SELECT * FROM public.feedbacks";
+      const params: any[] = [];
+      const conditions: string[] = [];
+
+      if (options?.productSlug) {
+        params.push(options.productSlug);
+        conditions.push(`product_slug = $${params.length}`);
+      }
+
+      if (options?.status && options.status !== "all") {
+        params.push(options.status);
+        conditions.push(`status = $${params.length}`);
+      }
+
+      if (conditions.length > 0) {
+        query += " WHERE " + conditions.join(" AND ");
+      }
+
+      query += " ORDER BY created_at DESC;";
+      const res = await clientPool.query(query, params);
+      if (res.rows) {
+        const feedbacks = res.rows.map(rowToFeedback);
+        return feedbacks;
+      }
+    } catch (err) {
+      console.warn("[DB] Supabase feedbacks query failed, using local fallback:", (err as Error).message);
+    }
+  }
+
+  let feedbacks = readJsonFile<StoredFeedback[]>(FEEDBACKS_FILE, []);
+  if (options?.productSlug) {
+    feedbacks = feedbacks.filter((f) => f.productSlug === options.productSlug);
+  }
+  if (options?.status && options.status !== "all") {
+    feedbacks = feedbacks.filter((f) => f.status === options.status);
+  }
+  return feedbacks.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+}
+
+export async function getApprovedFeedbacksByProduct(productSlug: string): Promise<StoredFeedback[]> {
+  return getAllFeedbacks({ productSlug, status: "approved" });
+}
+
+export async function getFeedbackById(id: string): Promise<StoredFeedback | null> {
+  const clientPool = getPool();
+  if (clientPool) {
+    try {
+      const res = await clientPool.query("SELECT * FROM public.feedbacks WHERE id = $1 LIMIT 1;", [id]);
+      if (res.rows && res.rows.length > 0) {
+        return rowToFeedback(res.rows[0]);
+      }
+    } catch (err) {
+      console.warn("[DB] Supabase feedback by id failed:", (err as Error).message);
+    }
+  }
+
+  const feedbacks = readJsonFile<StoredFeedback[]>(FEEDBACKS_FILE, []);
+  return feedbacks.find((f) => f.id === id) || null;
+}
+
+export async function getFeedbackStats(productSlug?: string): Promise<FeedbackStats> {
+  const allFeedbacks = await getAllFeedbacks(productSlug ? { productSlug, status: "approved" } : { status: "approved" });
+  
+  const totalCount = allFeedbacks.length;
+  if (totalCount === 0) {
+    return {
+      averageRating: 5.0,
+      totalCount: 0,
+      approvedCount: 0,
+      ratingDistribution: { 5: 0, 4: 0, 3: 0, 2: 0, 1: 0 },
+      verifiedFarmerCount: 0,
+    };
+  }
+
+  let totalRatingSum = 0;
+  const ratingDistribution: Record<number, number> = { 5: 0, 4: 0, 3: 0, 2: 0, 1: 0 };
+  let verifiedCount = 0;
+
+  for (const fb of allFeedbacks) {
+    totalRatingSum += fb.rating;
+    const r = Math.min(5, Math.max(1, Math.round(fb.rating)));
+    ratingDistribution[r] = (ratingDistribution[r] || 0) + 1;
+    if (fb.isVerifiedFarmer) verifiedCount++;
+  }
+
+  return {
+    averageRating: Number((totalRatingSum / totalCount).toFixed(1)),
+    totalCount,
+    approvedCount: totalCount,
+    ratingDistribution,
+    verifiedFarmerCount: verifiedCount,
+  };
+}
+
+export async function createFeedback(data: CreateFeedbackInput): Promise<StoredFeedback> {
+  const id = `fb-${Date.now()}`;
+  const now = new Date().toISOString();
+  const clientPool = getPool();
+
+  const tags = data.tags || [];
+  const status: FeedbackStatus = "approved"; // Automatically published for immediate visibility
+  const isVerifiedFarmer = data.isVerifiedFarmer ?? true;
+
+  if (clientPool) {
+    try {
+      const res = await clientPool.query(
+        `INSERT INTO public.feedbacks (
+          id, product_slug, product_name, customer_name, customer_location,
+          customer_phone, tractor_model, soil_type, usage_duration,
+          rating, durability_rating, performance_rating, service_rating,
+          headline, comment, tags, is_verified_farmer, status, is_featured,
+          admin_reply, created_at, updated_at
+        ) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20,$21,$22)
+        RETURNING *;`,
+        [
+          id,
+          data.productSlug,
+          data.productName,
+          data.customerName,
+          data.customerLocation,
+          data.customerPhone || null,
+          data.tractorModel || null,
+          data.soilType || null,
+          data.usageDuration || null,
+          data.rating,
+          data.durabilityRating || data.rating,
+          data.performanceRating || data.rating,
+          data.serviceRating || data.rating,
+          data.headline,
+          data.comment,
+          JSON.stringify(tags),
+          isVerifiedFarmer,
+          status,
+          false,
+          null,
+          now,
+          now,
+        ]
+      );
+
+      const saved = rowToFeedback(res.rows[0]);
+      const localFeedbacks = readJsonFile<StoredFeedback[]>(FEEDBACKS_FILE, []);
+      localFeedbacks.unshift(saved);
+      writeJsonFile(FEEDBACKS_FILE, localFeedbacks);
+      return saved;
+    } catch (err) {
+      console.warn("[DB] Supabase feedback insert failed, saving locally:", (err as Error).message);
+    }
+  }
+
+  const localFeedbacks = readJsonFile<StoredFeedback[]>(FEEDBACKS_FILE, []);
+  const newFeedback: StoredFeedback = {
+    id,
+    productSlug: data.productSlug,
+    productName: data.productName,
+    customerName: data.customerName,
+    customerLocation: data.customerLocation,
+    customerPhone: data.customerPhone,
+    tractorModel: data.tractorModel,
+    soilType: data.soilType,
+    usageDuration: data.usageDuration,
+    rating: data.rating,
+    durabilityRating: data.durabilityRating || data.rating,
+    performanceRating: data.performanceRating || data.rating,
+    serviceRating: data.serviceRating || data.rating,
+    headline: data.headline,
+    comment: data.comment,
+    tags,
+    isVerifiedFarmer,
+    status,
+    isFeatured: false,
+    adminReply: undefined,
+    createdAt: now,
+    updatedAt: now,
+  };
+
+  localFeedbacks.unshift(newFeedback);
+  writeJsonFile(FEEDBACKS_FILE, localFeedbacks);
+  return newFeedback;
+}
+
+export async function updateFeedback(
+  id: string,
+  updates: Partial<Pick<StoredFeedback, "status" | "isFeatured" | "adminReply">>
+): Promise<StoredFeedback | null> {
+  const clientPool = getPool();
+
+  if (clientPool) {
+    try {
+      const res = await clientPool.query(
+        `UPDATE public.feedbacks SET
+          status = COALESCE($1, status),
+          is_featured = COALESCE($2, is_featured),
+          admin_reply = COALESCE($3, admin_reply),
+          updated_at = NOW()
+        WHERE id = $4
+        RETURNING *;`,
+        [
+          updates.status || null,
+          updates.isFeatured !== undefined ? updates.isFeatured : null,
+          updates.adminReply !== undefined ? updates.adminReply : null,
+          id,
+        ]
+      );
+
+      if (res.rows && res.rows.length > 0) {
+        const updated = rowToFeedback(res.rows[0]);
+        const localFeedbacks = readJsonFile<StoredFeedback[]>(FEEDBACKS_FILE, []);
+        const idx = localFeedbacks.findIndex((f) => f.id === id);
+        if (idx !== -1) {
+          localFeedbacks[idx] = updated;
+          writeJsonFile(FEEDBACKS_FILE, localFeedbacks);
+        }
+        return updated;
+      }
+    } catch (err) {
+      console.warn("[DB] Supabase feedback update failed:", (err as Error).message);
+    }
+  }
+
+  const localFeedbacks = readJsonFile<StoredFeedback[]>(FEEDBACKS_FILE, []);
+  const index = localFeedbacks.findIndex((f) => f.id === id);
+  if (index === -1) return null;
+
+  localFeedbacks[index] = {
+    ...localFeedbacks[index],
+    ...updates,
+    updatedAt: new Date().toISOString(),
+  };
+
+  writeJsonFile(FEEDBACKS_FILE, localFeedbacks);
+  return localFeedbacks[index];
+}
+
+export async function deleteFeedback(id: string): Promise<boolean> {
+  const clientPool = getPool();
+  if (clientPool) {
+    try {
+      await clientPool.query("DELETE FROM public.feedbacks WHERE id = $1;", [id]);
+    } catch (err) {
+      console.warn("[DB] Supabase feedback delete failed:", (err as Error).message);
+    }
+  }
+
+  const localFeedbacks = readJsonFile<StoredFeedback[]>(FEEDBACKS_FILE, []);
+  const filtered = localFeedbacks.filter((f) => f.id !== id);
+  writeJsonFile(FEEDBACKS_FILE, filtered);
+  return true;
 }
