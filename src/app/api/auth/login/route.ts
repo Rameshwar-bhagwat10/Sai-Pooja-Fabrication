@@ -3,17 +3,26 @@ import { createSession } from "@/lib/auth";
 
 export async function POST(request: Request) {
   try {
-    const { password } = await request.json();
+    const body = await request.json();
+    const { password, email } = body || {};
     if (!password) {
       return NextResponse.json({ error: "Password is required" }, { status: 400 });
     }
 
-    const success = await createSession(password);
-    if (!success) {
-      return NextResponse.json({ error: "Invalid admin password" }, { status: 401 });
+    const result = await createSession(password, email);
+    if (!result.success) {
+      return NextResponse.json(
+        { error: result.error || "Invalid administrator credentials" },
+        { status: 401 }
+      );
     }
 
-    return NextResponse.json({ success: true, message: "Logged in successfully" });
+    return NextResponse.json({
+      success: true,
+      message: "Logged in successfully",
+      token: result.token,
+      user: result.user,
+    });
   } catch (error) {
     console.error("Login error:", error);
     return NextResponse.json({ error: "Authentication failed" }, { status: 500 });

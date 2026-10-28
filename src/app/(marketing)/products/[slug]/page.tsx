@@ -1,7 +1,7 @@
 import * as React from "react";
 import { type Metadata } from "next";
 import { notFound } from "next/navigation";
-import { getProductBySlug, getAllProducts, getSiteSettings } from "@/lib/db";
+import { getProductBySlug, getAllProducts, getSiteSettings, getApprovedFeedbacksByProduct, getFeedbackStats } from "@/lib/db";
 import { type ProductItem } from "@/types/product";
 import { constructMetadata } from "@/lib/metadata";
 
@@ -35,6 +35,7 @@ import { ProductGallery } from "@/components/products/product-gallery";
 import { RelatedProducts } from "@/components/products/related-products";
 import { ProductNavigation } from "@/components/products/product-navigation";
 import { ProductCta } from "@/components/products/product-cta";
+import { ProductReviewsSection } from "@/components/products/product-reviews-section";
 
 interface ProductPageProps {
   params: Promise<{ slug: string }>;
@@ -84,9 +85,11 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
     notFound();
   }
 
-  const [allProducts, settings] = await Promise.all([
+  const [allProducts, settings, feedbacks, feedbackStats] = await Promise.all([
     getAllProducts(),
     getSiteSettings(),
+    getApprovedFeedbacksByProduct(product.slug),
+    getFeedbackStats(product.slug),
   ]);
   const relatedProducts = getDynamicRelatedProducts(product, allProducts);
   const { prev, next } = getDynamicAdjacentProducts(product.slug, allProducts);
@@ -121,7 +124,14 @@ export default async function ProductDetailPage({ params }: ProductPageProps) {
       {/* 6. Interactive Visual Gallery & Lightbox — Soft White */}
       <ProductGallery product={product} />
 
-      {/* 7. Related Equipment — Forest 900 */}
+      {/* 7. Verified Farmer Reviews & Field Performance */}
+      <ProductReviewsSection
+        product={product}
+        feedbacks={feedbacks}
+        stats={feedbackStats}
+      />
+
+      {/* 8. Related Equipment — Forest 900 */}
       <RelatedProducts relatedProducts={relatedProducts} />
 
       {/* 8. Previous / Next Implement Navigation — Charcoal */}

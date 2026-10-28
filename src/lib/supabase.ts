@@ -7,11 +7,14 @@ const supabaseAnonKey =
 const supabaseServiceRoleKey =
   process.env.SUPABASE_SERVICE_ROLE_KEY || "";
 
+// Safe fallback dummy key to prevent module crash when env var is omitted
+const safeAnonKey = supabaseAnonKey || "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.dummy";
+
 /**
  * Universal Supabase Client
  * Suitable for client components and public queries (respects Row Level Security).
  */
-export const supabase = createClient(supabaseUrl, supabaseAnonKey);
+export const supabase = createClient(supabaseUrl, safeAnonKey);
 
 /**
  * Admin Supabase Client (Server-side operations only)

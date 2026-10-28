@@ -14,6 +14,7 @@ import {
   ShieldCheck,
   Menu,
   X,
+  MessageSquareQuote,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -25,6 +26,7 @@ const NAV_ITEMS = [
   { label: "Dashboard", href: "/admin", icon: LayoutDashboard },
   { label: "Products / Implements", href: "/admin/products", icon: Package },
   { label: "Inquiries & Leads", href: "/admin/inquiries", icon: Inbox, hasBadge: true },
+  { label: "Farmer Feedback", href: "/admin/feedback", icon: MessageSquareQuote },
   { label: "Gallery Showcase", href: "/admin/gallery", icon: ImageIcon },
   { label: "Company & FAQs", href: "/admin/settings", icon: Settings },
 ];

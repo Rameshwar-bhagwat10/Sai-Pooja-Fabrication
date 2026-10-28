@@ -27,7 +27,7 @@
 | **Iconography** | **Lucide React** | `^1.34.0` | High-efficiency SVG icons for agricultural machinery, technical specs, and UI navigation. |
 | **Typography** | **next/font/google** | `Space Grotesk` & `Inter` | Zero-layout-shift font optimization. Display headers in *Space Grotesk*, body text in *Inter*. |
 | **Database & ORM** | **Supabase & PostgreSQL** | `@supabase/supabase-js`, `pg` | Relational PostgreSQL database with connection pooling and Supabase client SDK. |
-| **Authentication** | **HTTP-Only Cookie Session** | Custom `src/lib/auth.ts` | Secure administrative authentication via encrypted session tokens. |
+| **Authentication** | **JWT & HTTP-Only Cookie Session** | `jose` (`HS256`), `src/lib/auth.ts` | Cryptographically signed JSON Web Tokens (HS256) with HTTP-only cookie and Authorization Bearer header support. |
 | **Image Optimization** | **Next.js Image** | `next/image` | Automatic AVIF/WebP conversion, responsive `sizes`, blur placeholders, and LCP priority loading. |
 
 ---
@@ -194,8 +194,9 @@ Sent via Sai Pooja Fabrication Official Website
 ## 6. Admin Dashboard & Owner Workflow (`/admin`)
 
 ### 1. Authentication & Security (`/admin/login`)
-* Protected by HTTP-Only session cookies (`spf_admin_session`).
-* Password verified against the `ADMIN_PASSWORD` environment variable.
+* Protected by cryptographically signed JSON Web Tokens (JWT via `jose` library with HS256 algorithm).
+* Stored in secure HTTP-Only session cookies (`spf_admin_session`) and returned via `/api/auth/login` for Bearer token authorization.
+* Password verified against the `ADMIN_PASSWORD` environment variable; token signature verified using `JWT_SECRET`.
 
 ### 2. Management Modules
 * **Dashboard Overview (`/admin`)**: Metric cards for Total Products, Active Inquiries, Gallery Assets, and System Connection Status.
@@ -425,8 +426,9 @@ d:/projects/sai-pooja-fabrication/
 # 1. Base URL for Canonical SEO & Open Graph
 NEXT_PUBLIC_SITE_URL=https://saipoojafabrication.com
 
-# 2. Administrative Dashboard Password
+# 2. Administrative Dashboard Password & JWT Secret
 ADMIN_PASSWORD=your_secure_password_here
+JWT_SECRET=your_long_random_jwt_secret_here
 
 # 3. Supabase / PostgreSQL Configuration (Optional - falls back to local JSON if omitted)
 NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co

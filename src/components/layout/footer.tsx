@@ -84,6 +84,12 @@ export function Footer({ company = COMPANY_INFO }: FooterProps = {}) {
                 </Link>
               </li>
               <li>
+                <Link href="/feedback" className="hover:text-[#C8913D] transition-colors font-medium flex items-center gap-1">
+                  <span>Farmer Feedback & Reviews</span>
+                  <span className="text-[10px] font-mono px-1.5 py-0.2 rounded bg-amber-500/20 text-[#C8913D]">NEW</span>
+                </Link>
+              </li>
+              <li>
                 <Link href="/contact" className="hover:text-white transition-colors">
                   Contact & Location
                 </Link>
