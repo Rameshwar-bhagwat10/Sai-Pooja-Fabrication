@@ -12,6 +12,7 @@ import { GALLERY_ITEMS } from "@/data/gallery";
 import { COMPANY_INFO } from "@/data/company";
 import { CONTACT_FAQS } from "@/data/contact";
 import { type StoredFeedback, type CreateFeedbackInput, type FeedbackStatus, type FeedbackStats } from "@/types/feedback";
+import { supabaseAdmin } from "@/lib/supabase";
 
 const { Pool } = pg;
 
@@ -52,9 +53,16 @@ export interface StoredSettings {
 let pool: pg.Pool | null = null;
 
 export function normalizeDatabaseUrl(rawUrl: string): string {
+  let url = rawUrl;
+  // Fix mistyped password if present
+  if (url.includes("SaiPoojaFabraications") || url.includes("SaiPoojaFabrications")) {
+    url = url
+      .replace(/SaiPoojaFabraications/g, "saipoojafabricati9ns")
+      .replace(/SaiPoojaFabrications/g, "saipoojafabricati9ns");
+  }
   // Translate direct Supabase hostname to IPv4 pooler if necessary
-  if (rawUrl.includes("db.ihaxijlnumozvghgvcqf.supabase.co")) {
-    return rawUrl
+  if (url.includes("db.ihaxijlnumozvghgvcqf.supabase.co")) {
+    url = url
       .replace(
         "postgres:saipoojafabricati9ns@db.ihaxijlnumozvghgvcqf.supabase.co:5432",
         "postgres.ihaxijlnumozvghgvcqf:saipoojafabricati9ns@aws-0-ap-northeast-1.pooler.supabase.com:5432"
@@ -64,7 +72,7 @@ export function normalizeDatabaseUrl(rawUrl: string): string {
         "@aws-0-ap-northeast-1.pooler.supabase.com:5432"
       );
   }
-  return rawUrl;
+  return url;
 }
 
 export function getPool(): pg.Pool | null {
@@ -528,44 +536,76 @@ export async function getAllInquiries(): Promise<StoredInquiry[]> {
 export async function createInquiry(data: InquiryFormData): Promise<StoredInquiry> {
   const id = `inq-${Date.now()}`;
   const now = new Date().toISOString();
-  const clientPool = getPool();
+  let savedInquiry: StoredInquiry | null = null;
 
-  if (clientPool) {
-    try {
-      const res = await clientPool.query(
-        `INSERT INTO public.inquiries (
-          id, inquiry_type, selected_product, name, phone, email,
-          requirement, additional_details, status, notes, created_at, updated_at
-        ) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12)
-        RETURNING *;`,
-        [
-          id,
-          data.inquiryType,
-          data.selectedProduct || "",
-          data.name,
-          data.phone,
-          data.email || "",
-          data.requirement,
-          data.additionalDetails || "",
-          "new",
-          "",
-          now,
-          now,
-        ]
-      );
+  // 1. Primary: Supabase REST API via Service Role Client
+  try {
+    const { data: inserted, error: sbError } = await supabaseAdmin
+      .from("inquiries")
+      .insert({
+        id,
+        inquiry_type: data.inquiryType,
+        selected_product: data.selectedProduct || "",
+        name: data.name,
+        phone: data.phone,
+        email: data.email || "",
+        requirement: data.requirement,
+        additional_details: data.additionalDetails || "",
+        status: "new",
+        notes: "",
+        created_at: now,
+        updated_at: now,
+      })
+      .select()
+      .single();
 
-      const saved = rowToInquiry(res.rows[0]);
-      const localInquiries = readJsonFile<StoredInquiry[]>(INQUIRIES_FILE, []);
-      localInquiries.unshift(saved);
-      writeJsonFile(INQUIRIES_FILE, localInquiries);
-      return saved;
-    } catch (err) {
-      console.warn("[DB] Supabase inquiry insert failed, saving locally:", (err as Error).message);
+    if (!sbError && inserted) {
+      savedInquiry = rowToInquiry(inserted);
+    } else if (sbError) {
+      console.warn("[DB] Supabase REST inquiry insert error:", sbError.message);
+    }
+  } catch (err) {
+    console.warn("[DB] Supabase REST inquiry client exception:", (err as Error).message);
+  }
+
+  // 2. Secondary: Direct PostgreSQL Pool
+  if (!savedInquiry) {
+    const clientPool = getPool();
+    if (clientPool) {
+      try {
+        const res = await clientPool.query(
+          `INSERT INTO public.inquiries (
+            id, inquiry_type, selected_product, name, phone, email,
+            requirement, additional_details, status, notes, created_at, updated_at
+          ) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12)
+          RETURNING *;`,
+          [
+            id,
+            data.inquiryType,
+            data.selectedProduct || "",
+            data.name,
+            data.phone,
+            data.email || "",
+            data.requirement,
+            data.additionalDetails || "",
+            "new",
+            "",
+            now,
+            now,
+          ]
+        );
+        if (res.rows && res.rows.length > 0) {
+          savedInquiry = rowToInquiry(res.rows[0]);
+        }
+      } catch (err) {
+        console.warn("[DB] PostgreSQL inquiry pool insert failed:", (err as Error).message);
+      }
     }
   }
 
+  // 3. Keep local fallback cache in sync
   const localInquiries = readJsonFile<StoredInquiry[]>(INQUIRIES_FILE, []);
-  const newInquiry: StoredInquiry = {
+  const newInquiry: StoredInquiry = savedInquiry || {
     ...data,
     id,
     status: "new",
@@ -573,7 +613,12 @@ export async function createInquiry(data: InquiryFormData): Promise<StoredInquir
     updatedAt: now,
   };
 
-  localInquiries.unshift(newInquiry);
+  const idx = localInquiries.findIndex((i) => i.id === id);
+  if (idx >= 0) {
+    localInquiries[idx] = newInquiry;
+  } else {
+    localInquiries.unshift(newInquiry);
+  }
   writeJsonFile(INQUIRIES_FILE, localInquiries);
   return newInquiry;
 }
@@ -1049,6 +1094,27 @@ export async function getAllFeedbacks(options?: {
   productSlug?: string;
   status?: FeedbackStatus | "all";
 }): Promise<StoredFeedback[]> {
+  // 1. Primary: Supabase REST API via Service Role Client
+  try {
+    let query = supabaseAdmin.from("feedbacks").select("*");
+    if (options?.productSlug) {
+      query = query.eq("product_slug", options.productSlug);
+    }
+    if (options?.status && options.status !== "all") {
+      query = query.eq("status", options.status);
+    }
+    query = query.order("created_at", { ascending: false });
+
+    const { data, error } = await query;
+    if (!error && data && data.length > 0) {
+      const feedbacks = data.map(rowToFeedback);
+      return feedbacks;
+    }
+  } catch (err) {
+    console.warn("[DB] Supabase REST feedbacks query failed:", (err as Error).message);
+  }
+
+  // 2. Secondary: Direct PostgreSQL Pool
   const clientPool = getPool();
   if (clientPool) {
     try {
@@ -1072,15 +1138,16 @@ export async function getAllFeedbacks(options?: {
 
       query += " ORDER BY created_at DESC;";
       const res = await clientPool.query(query, params);
-      if (res.rows) {
+      if (res.rows && res.rows.length > 0) {
         const feedbacks = res.rows.map(rowToFeedback);
         return feedbacks;
       }
     } catch (err) {
-      console.warn("[DB] Supabase feedbacks query failed, using local fallback:", (err as Error).message);
+      console.warn("[DB] Supabase feedbacks PG query failed, using local fallback:", (err as Error).message);
     }
   }
 
+  // 3. Fallback: Local JSON file
   let feedbacks = readJsonFile<StoredFeedback[]>(FEEDBACKS_FILE, []);
   if (options?.productSlug) {
     feedbacks = feedbacks.filter((f) => f.productSlug === options.productSlug);
@@ -1096,6 +1163,17 @@ export async function getApprovedFeedbacksByProduct(productSlug: string): Promis
 }
 
 export async function getFeedbackById(id: string): Promise<StoredFeedback | null> {
+  // 1. Primary: Supabase REST API
+  try {
+    const { data, error } = await supabaseAdmin.from("feedbacks").select("*").eq("id", id).maybeSingle();
+    if (!error && data) {
+      return rowToFeedback(data);
+    }
+  } catch (err) {
+    console.warn("[DB] Supabase REST feedback by id failed:", (err as Error).message);
+  }
+
+  // 2. Secondary: Direct PostgreSQL Pool
   const clientPool = getPool();
   if (clientPool) {
     try {
@@ -1104,10 +1182,11 @@ export async function getFeedbackById(id: string): Promise<StoredFeedback | null
         return rowToFeedback(res.rows[0]);
       }
     } catch (err) {
-      console.warn("[DB] Supabase feedback by id failed:", (err as Error).message);
+      console.warn("[DB] Supabase feedback PG by id failed:", (err as Error).message);
     }
   }
 
+  // 3. Fallback: Local JSON file
   const feedbacks = readJsonFile<StoredFeedback[]>(FEEDBACKS_FILE, []);
   return feedbacks.find((f) => f.id === id) || null;
 }
@@ -1149,61 +1228,103 @@ export async function getFeedbackStats(productSlug?: string): Promise<FeedbackSt
 export async function createFeedback(data: CreateFeedbackInput): Promise<StoredFeedback> {
   const id = `fb-${Date.now()}`;
   const now = new Date().toISOString();
-  const clientPool = getPool();
-
   const tags = data.tags || [];
   const status: FeedbackStatus = "approved"; // Automatically published for immediate visibility
   const isVerifiedFarmer = data.isVerifiedFarmer ?? true;
 
-  if (clientPool) {
-    try {
-      const res = await clientPool.query(
-        `INSERT INTO public.feedbacks (
-          id, product_slug, product_name, customer_name, customer_location,
-          customer_phone, tractor_model, soil_type, usage_duration,
-          rating, durability_rating, performance_rating, service_rating,
-          headline, comment, tags, is_verified_farmer, status, is_featured,
-          admin_reply, created_at, updated_at
-        ) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20,$21,$22)
-        RETURNING *;`,
-        [
-          id,
-          data.productSlug,
-          data.productName,
-          data.customerName,
-          data.customerLocation,
-          data.customerPhone || null,
-          data.tractorModel || null,
-          data.soilType || null,
-          data.usageDuration || null,
-          data.rating,
-          data.durabilityRating || data.rating,
-          data.performanceRating || data.rating,
-          data.serviceRating || data.rating,
-          data.headline,
-          data.comment,
-          JSON.stringify(tags),
-          isVerifiedFarmer,
-          status,
-          false,
-          null,
-          now,
-          now,
-        ]
-      );
+  let savedFromDb: StoredFeedback | null = null;
 
-      const saved = rowToFeedback(res.rows[0]);
-      const localFeedbacks = readJsonFile<StoredFeedback[]>(FEEDBACKS_FILE, []);
-      localFeedbacks.unshift(saved);
-      writeJsonFile(FEEDBACKS_FILE, localFeedbacks);
-      return saved;
-    } catch (err) {
-      console.warn("[DB] Supabase feedback insert failed, saving locally:", (err as Error).message);
+  // 1. Primary: Supabase REST API via Service Role Client (guaranteed to reach Supabase over HTTPS)
+  try {
+    const { data: inserted, error: sbError } = await supabaseAdmin
+      .from("feedbacks")
+      .insert({
+        id,
+        product_slug: data.productSlug,
+        product_name: data.productName,
+        customer_name: data.customerName,
+        customer_location: data.customerLocation,
+        customer_phone: data.customerPhone || null,
+        tractor_model: data.tractorModel || null,
+        soil_type: data.soilType || null,
+        usage_duration: data.usageDuration || null,
+        rating: data.rating,
+        durability_rating: data.durabilityRating || data.rating,
+        performance_rating: data.performanceRating || data.rating,
+        service_rating: data.serviceRating || data.rating,
+        headline: data.headline,
+        comment: data.comment,
+        tags,
+        is_verified_farmer: isVerifiedFarmer,
+        status,
+        is_featured: false,
+        admin_reply: null,
+        created_at: now,
+        updated_at: now,
+      })
+      .select()
+      .single();
+
+    if (!sbError && inserted) {
+      savedFromDb = rowToFeedback(inserted);
+    } else if (sbError) {
+      console.warn("[DB] Supabase REST feedback insert error:", sbError.message);
+    }
+  } catch (err) {
+    console.warn("[DB] Supabase REST feedback client exception:", (err as Error).message);
+  }
+
+  // 2. Secondary: Direct PostgreSQL Pool
+  if (!savedFromDb) {
+    const clientPool = getPool();
+    if (clientPool) {
+      try {
+        const res = await clientPool.query(
+          `INSERT INTO public.feedbacks (
+            id, product_slug, product_name, customer_name, customer_location,
+            customer_phone, tractor_model, soil_type, usage_duration,
+            rating, durability_rating, performance_rating, service_rating,
+            headline, comment, tags, is_verified_farmer, status, is_featured,
+            admin_reply, created_at, updated_at
+          ) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20,$21,$22)
+          RETURNING *;`,
+          [
+            id,
+            data.productSlug,
+            data.productName,
+            data.customerName,
+            data.customerLocation,
+            data.customerPhone || null,
+            data.tractorModel || null,
+            data.soilType || null,
+            data.usageDuration || null,
+            data.rating,
+            data.durabilityRating || data.rating,
+            data.performanceRating || data.rating,
+            data.serviceRating || data.rating,
+            data.headline,
+            data.comment,
+            JSON.stringify(tags),
+            isVerifiedFarmer,
+            status,
+            false,
+            null,
+            now,
+            now,
+          ]
+        );
+        if (res.rows && res.rows.length > 0) {
+          savedFromDb = rowToFeedback(res.rows[0]);
+        }
+      } catch (err) {
+        console.warn("[DB] Supabase feedback PG pool insert failed:", (err as Error).message);
+      }
     }
   }
 
+  // 3. Keep local fallback cache in sync
   const localFeedbacks = readJsonFile<StoredFeedback[]>(FEEDBACKS_FILE, []);
-  const newFeedback: StoredFeedback = {
+  const finalFeedback: StoredFeedback = savedFromDb || {
     id,
     productSlug: data.productSlug,
     productName: data.productName,
@@ -1228,74 +1349,116 @@ export async function createFeedback(data: CreateFeedbackInput): Promise<StoredF
     updatedAt: now,
   };
 
-  localFeedbacks.unshift(newFeedback);
+  const idx = localFeedbacks.findIndex((f) => f.id === id);
+  if (idx >= 0) {
+    localFeedbacks[idx] = finalFeedback;
+  } else {
+    localFeedbacks.unshift(finalFeedback);
+  }
   writeJsonFile(FEEDBACKS_FILE, localFeedbacks);
-  return newFeedback;
+
+  return finalFeedback;
 }
 
 export async function updateFeedback(
   id: string,
   updates: Partial<Pick<StoredFeedback, "status" | "isFeatured" | "adminReply">>
 ): Promise<StoredFeedback | null> {
-  const clientPool = getPool();
+  const updatePayload: Record<string, any> = {
+    updated_at: new Date().toISOString(),
+  };
+  if (updates.status !== undefined) updatePayload.status = updates.status;
+  if (updates.isFeatured !== undefined) updatePayload.is_featured = updates.isFeatured;
+  if (updates.adminReply !== undefined) updatePayload.admin_reply = updates.adminReply;
 
-  if (clientPool) {
-    try {
-      const res = await clientPool.query(
-        `UPDATE public.feedbacks SET
-          status = COALESCE($1, status),
-          is_featured = COALESCE($2, is_featured),
-          admin_reply = COALESCE($3, admin_reply),
-          updated_at = NOW()
-        WHERE id = $4
-        RETURNING *;`,
-        [
-          updates.status || null,
-          updates.isFeatured !== undefined ? updates.isFeatured : null,
-          updates.adminReply !== undefined ? updates.adminReply : null,
-          id,
-        ]
-      );
+  let updated: StoredFeedback | null = null;
 
-      if (res.rows && res.rows.length > 0) {
-        const updated = rowToFeedback(res.rows[0]);
-        const localFeedbacks = readJsonFile<StoredFeedback[]>(FEEDBACKS_FILE, []);
-        const idx = localFeedbacks.findIndex((f) => f.id === id);
-        if (idx !== -1) {
-          localFeedbacks[idx] = updated;
-          writeJsonFile(FEEDBACKS_FILE, localFeedbacks);
+  // 1. Primary: Supabase REST API
+  try {
+    const { data, error } = await supabaseAdmin
+      .from("feedbacks")
+      .update(updatePayload)
+      .eq("id", id)
+      .select()
+      .maybeSingle();
+
+    if (!error && data) {
+      updated = rowToFeedback(data);
+    } else if (error) {
+      console.warn("[DB] Supabase REST feedback update error:", error.message);
+    }
+  } catch (err) {
+    console.warn("[DB] Supabase REST feedback update exception:", (err as Error).message);
+  }
+
+  // 2. Secondary: Direct PostgreSQL Pool
+  if (!updated) {
+    const clientPool = getPool();
+    if (clientPool) {
+      try {
+        const res = await clientPool.query(
+          `UPDATE public.feedbacks SET
+            status = COALESCE($1, status),
+            is_featured = COALESCE($2, is_featured),
+            admin_reply = COALESCE($3, admin_reply),
+            updated_at = NOW()
+          WHERE id = $4
+          RETURNING *;`,
+          [
+            updates.status || null,
+            updates.isFeatured !== undefined ? updates.isFeatured : null,
+            updates.adminReply !== undefined ? updates.adminReply : null,
+            id,
+          ]
+        );
+
+        if (res.rows && res.rows.length > 0) {
+          updated = rowToFeedback(res.rows[0]);
         }
-        return updated;
+      } catch (err) {
+        console.warn("[DB] Supabase feedback PG pool update failed:", (err as Error).message);
       }
-    } catch (err) {
-      console.warn("[DB] Supabase feedback update failed:", (err as Error).message);
     }
   }
 
+  // 3. Keep local fallback cache in sync
   const localFeedbacks = readJsonFile<StoredFeedback[]>(FEEDBACKS_FILE, []);
   const index = localFeedbacks.findIndex((f) => f.id === id);
-  if (index === -1) return null;
+  if (index !== -1) {
+    localFeedbacks[index] = updated || {
+      ...localFeedbacks[index],
+      ...updates,
+      updatedAt: new Date().toISOString(),
+    };
+    writeJsonFile(FEEDBACKS_FILE, localFeedbacks);
+    return localFeedbacks[index];
+  }
 
-  localFeedbacks[index] = {
-    ...localFeedbacks[index],
-    ...updates,
-    updatedAt: new Date().toISOString(),
-  };
-
-  writeJsonFile(FEEDBACKS_FILE, localFeedbacks);
-  return localFeedbacks[index];
+  return updated;
 }
 
 export async function deleteFeedback(id: string): Promise<boolean> {
+  // 1. Primary: Supabase REST API
+  try {
+    const { error } = await supabaseAdmin.from("feedbacks").delete().eq("id", id);
+    if (error) {
+      console.warn("[DB] Supabase REST feedback delete error:", error.message);
+    }
+  } catch (err) {
+    console.warn("[DB] Supabase REST feedback delete exception:", (err as Error).message);
+  }
+
+  // 2. Secondary: Direct PostgreSQL Pool
   const clientPool = getPool();
   if (clientPool) {
     try {
       await clientPool.query("DELETE FROM public.feedbacks WHERE id = $1;", [id]);
     } catch (err) {
-      console.warn("[DB] Supabase feedback delete failed:", (err as Error).message);
+      console.warn("[DB] Supabase feedback PG pool delete failed:", (err as Error).message);
     }
   }
 
+  // 3. Keep local fallback cache in sync
   const localFeedbacks = readJsonFile<StoredFeedback[]>(FEEDBACKS_FILE, []);
   const filtered = localFeedbacks.filter((f) => f.id !== id);
   writeJsonFile(FEEDBACKS_FILE, filtered);
